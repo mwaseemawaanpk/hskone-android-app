@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>新HSK教程 1 – Audio Companion</title>
+<style>
+/* Colour system: one colour per language so the eye always knows what it is reading.
+   Seal red = Chinese (and primary actions) · Porcelain blue = English · Jade = Urdu · Gold = "now playing" */
+:root{color-scheme:light dark;
+--bg:#f1f4f9;--card:#fff;--tint:#f5f7fb;--ink:#131a27;--mute:#586378;--line:#e0e5ee;
+--red:#c23a2f;--red-soft:#fbe8e5;--blue:#2a5bb0;--blue-soft:#e5edfa;--jade:#0c7a5a;--jade-soft:#dcf2e9;
+--gold:#d8a31d;--hl:#fff3d6;--on:#fff;--vbg:#fff4d9;--vline:#f0d9a0;--vtint:#ffeab8;--vink:#7a5200;
+--shadow:0 1px 2px rgba(19,26,39,.06),0 10px 24px -14px rgba(19,26,39,.2);
+--serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun","Noto Serif",Georgia,serif;
+--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+--nast:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq","Noto Naskh Arabic","Segoe UI",serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+--bg:#0d1119;--card:#151a25;--tint:#1b2130;--ink:#edf0f6;--mute:#9ba6bb;--line:#252d3e;
+--red:#ff7f6e;--red-soft:#34201f;--blue:#8fb2ff;--blue-soft:#1a2947;--jade:#4fd3a3;--jade-soft:#12342a;
+--gold:#e9b83a;--hl:#2d2715;--on:#1a0d0b;--vbg:#2b2413;--vline:#4a3d1b;--vtint:#3a2f14;--vink:#f0c868;
+--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 24px -14px rgba(0,0,0,.6)}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);padding-bottom:env(safe-area-inset-bottom,0px)}
+button,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.hide{display:none!important}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:var(--bg);background:color-mix(in srgb,var(--bg) 88%,transparent);
+ -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+ padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px}
+.top>*{max-width:720px;margin-inline:auto}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.seal{flex:none;width:36px;height:36px;border-radius:8px;background:var(--red);color:var(--on);
+ font:700 21px/36px var(--serif);text-align:center;transform:rotate(-3deg);
+ box-shadow:inset 0 0 0 2px var(--red),inset 0 0 0 3.5px rgba(255,255,255,.55)}
+h1{margin:0;font:650 17px/1.2 var(--sans);letter-spacing:.01em}
+.sub{margin:1px 0 0;font-size:12.5px;color:var(--mute)}
+.menu{display:flex;gap:8px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.menu::-webkit-scrollbar{display:none}
+.chip{flex:none;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);
+ font:600 15px var(--sans);font-variant-numeric:tabular-nums;transition:background .15s,color .15s}
+.chip.on{background:var(--red);border-color:var(--red);color:var(--on)}
+.chip:disabled{opacity:.4;cursor:default;border-style:dashed;background:transparent}
+
+main{max-width:720px;margin:0 auto;padding:14px 16px 56px}
+
+/* controls */
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.btn{appearance:none;display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 16px;border:1px solid transparent;
+ border-radius:999px;background:var(--red);color:var(--on);font-weight:600;font-size:14px}
+.btn.alt{background:var(--red-soft);color:var(--red)}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+.btn.nx{background:transparent;color:var(--red);border-color:var(--red)}
+.btn svg{width:13px;height:13px}
+.tog{appearance:none;display:inline-flex;align-items:center;gap:9px;height:38px;padding:0 14px;border:1px solid var(--line);
+ border-radius:999px;background:var(--card);color:var(--ink);font-weight:600;font-size:14px;transition:background .15s,border-color .15s}
+.tog i{width:10px;height:10px;border-radius:50%;background:var(--line);box-shadow:inset 0 0 0 1px var(--mute)}
+.tog .st{font-weight:500;color:var(--mute);font-size:12.5px}
+.tog.en.is-on{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.tog.en.is-on i{background:var(--blue);box-shadow:none}
+.tog.ur.is-on{background:var(--jade-soft);border-color:var(--jade);color:var(--jade)}
+.tog.ur.is-on i{background:var(--jade);box-shadow:none}
+.tog.is-on .st{color:inherit}
+select{height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:600;font-size:14px}
+
+/* lesson headings */
+.lt{margin:26px 2px 4px;font:700 30px/1.15 var(--serif);letter-spacing:.01em}
+.lt .no{display:block;margin-bottom:5px;font:600 13px var(--sans);color:var(--red);letter-spacing:0}
+.lt .en{display:block;margin-top:6px;font:400 15px var(--sans);color:var(--blue)}
+.sec{display:flex;align-items:center;gap:9px;margin:26px 2px 10px;font:650 15px var(--sans)}
+.sec::before{content:"";width:4px;height:17px;border-radius:2px;background:var(--red)}
+.vh{margin:18px 2px 8px;font:600 13px var(--sans);color:var(--mute)}
+
+/* cards and dialogue rows */
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:6px 12px 10px;margin-bottom:12px;box-shadow:var(--shadow)}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0 10px}
+.line{display:grid;grid-template-columns:62px 1fr 46px;gap:10px;align-items:center;padding:12px 8px;border-top:1px solid var(--line);
+ border-radius:12px;scroll-margin-top:140px;transition:background .2s,box-shadow .2s}
+.bar+.line,.line.solo{border-top-color:transparent}
+.line.solo{grid-template-columns:1fr 46px}
+.line.playing{background:var(--hl);box-shadow:inset 3px 0 0 var(--gold)}
+.who{text-align:center;font-size:11px;line-height:1.3;color:var(--mute)}
+.who b{display:block;margin-bottom:1px;font:600 15px/1.3 var(--serif);color:var(--ink)}
+.txt{min-width:0}
+.py{font-size:13.5px;color:var(--mute)}
+.zh{margin:1px 0 4px;font:500 24px/1.4 var(--serif)}
+.en{font-size:14px;color:var(--blue)}
+.sound{margin:4px 0 7px;padding:7px 11px;border-radius:10px;background:var(--tint);border:1px solid var(--line)}
+.pr{font-size:14px;font-style:italic;color:var(--ink)}
+.ur{direction:rtl;text-align:right;font:400 18px/2 var(--nast)}
+.prx{font-size:16px;color:var(--jade)}
+.ut{margin-top:4px;font-size:17px;color:var(--jade)}
+.pos{color:var(--mute)}
+
+/* audio buttons */
+.spk{position:relative;width:46px;height:46px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--red-soft);color:var(--red);transition:background .15s,color .15s}
+.spk svg{width:22px;height:22px}
+.spk.on{background:var(--red);color:var(--on)}
+.spk.on::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--red);animation:ring 1.2s ease-out infinite}
+@keyframes ring{from{transform:scale(.88);opacity:.7}to{transform:scale(1.28);opacity:0}}
+.pill{appearance:none;position:relative;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px 0 8px;margin-inline-start:8px;
+ border:0;border-radius:999px;background:var(--blue-soft);color:var(--blue);font:700 11.5px/1 var(--sans);vertical-align:middle;transition:background .15s,color .15s}
+.pill::after{content:"";position:absolute;inset:-9px -4px}
+.pill svg{width:14px;height:14px}
+.pill.urb{background:var(--jade-soft);color:var(--jade)}
+.pill.urb span{font:600 13px/1 "Noto Naskh Arabic","Segoe UI",system-ui,sans-serif}
+.pill.on{background:var(--blue);color:var(--on)}
+.pill.urb.on{background:var(--jade);color:var(--on)}
+
+/* vocabulary sheet: amber, so it looks different from the lesson cards */
+.card.vc{background:var(--vbg);border-color:var(--vline)}
+.card.vc td{border-top-color:var(--vline)}
+.card.vc .sound{background:var(--vtint);border-color:var(--vline)}
+.vh{color:var(--vink)!important;display:flex;align-items:center;gap:8px}
+.vh::before{content:"";width:4px;height:15px;border-radius:2px;background:var(--gold)}
+/* vocabulary */
+table{width:100%;border-collapse:collapse}
+td{padding:10px 4px;vertical-align:middle;border-top:1px solid var(--line)}
+tr:first-child td{border-top:0}
+td.zh{width:1%;padding-right:14px;margin:0;white-space:nowrap}
+td:last-child{width:54px;text-align:right}
+
+.note{max-width:62ch;margin:14px 4px 0;font-size:12.5px;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);z-index:50;max-width:min(92vw,420px);padding:11px 16px;
+ border-radius:14px;background:var(--ink);color:var(--bg);font-size:13.5px;text-align:center;opacity:0;transform:translate(-50%,16px);pointer-events:none;transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:380px){.lt{font-size:26px}.line{grid-template-columns:54px 1fr 44px;gap:8px}}
+/* counting */
+.chip.cnt{width:auto;display:inline-flex;align-items:center;gap:7px;padding:0 14px 0 12px;margin-right:6px;border-color:var(--red);color:var(--red);font-weight:650;font-size:14px}
+.chip.cnt b{font:700 18px/1 var(--serif)}
+.chip.cnt.on{color:var(--on)}
+.tip{margin:4px 0 12px;padding:10px 12px;border-radius:12px;background:var(--tint);border:1px solid var(--line);font-size:13.5px;line-height:1.65;color:var(--mute)}
+.tip b{color:var(--ink)}
+.tip .zh{display:inline;margin:0;font:600 16px var(--serif);color:var(--ink)}
+.ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;padding:2px 0 4px}
+.ntile{position:relative;display:flex;flex-direction:column;align-items:center;min-height:152px;padding:10px 6px;border:1px solid var(--line);border-radius:16px;background:var(--tint);color:var(--ink);text-align:center;line-height:1.3;transition:background .15s,border-color .15s,box-shadow .15s}
+.ntile>span{display:block}
+.ntile .dg{position:absolute;top:7px;left:10px;font:600 12px var(--sans);color:var(--mute);font-variant-numeric:tabular-nums}
+.ntile .ud{position:absolute;top:4px;right:10px;font:500 13px var(--nast);color:var(--jade)}
+.ntile .h{margin-top:14px;font:600 34px/1.2 var(--serif)}
+.ntile .p{font-size:13.5px;color:var(--mute)}
+.ntile .pr{margin-top:3px;font-size:13px}
+.ntile .prx{font-size:15px;line-height:1.8;text-align:center}
+.ntile .w{margin-top:auto;padding-top:4px;font-size:12px;color:var(--blue)}
+.ntile .w span{font:400 14px var(--nast);color:var(--jade)}
+.ntile.on,.ntile.playing{background:var(--hl);border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.big{font:700 16px var(--sans);color:var(--ink);font-variant-numeric:tabular-nums}
+.nin{width:min(100%,220px);height:44px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:600 20px var(--sans);font-variant-numeric:tabular-nums}
+.nbig{padding:2px 2px 10px;font:600 14px var(--sans);color:var(--mute)}
+.nbig b{font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
+.nbig span{margin-left:8px;font:500 18px var(--nast);color:var(--jade)}
+.nrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.toks{display:flex;flex-wrap:wrap;gap:6px}
+.tok{display:flex;flex-direction:column;align-items:center;min-width:46px;padding:6px 8px;border-radius:12px;background:var(--red-soft)}
+.tok b{font:600 28px/1.25 var(--serif);color:var(--ink)}
+.tok i{font-style:normal;font-size:12px;color:var(--red)}
+.nsound{margin-top:12px}
+.qtop{display:flex;align-items:center;gap:12px;padding:4px 0 12px}
+.qtop p{flex:1;margin:0;font-size:13.5px;color:var(--mute)}
+.score{margin-left:auto;white-space:nowrap;font:600 13px var(--sans);color:var(--mute);font-variant-numeric:tabular-nums}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qopt{height:58px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:600 22px var(--sans);font-variant-numeric:tabular-nums;transition:background .15s,border-color .15s}
+.qopt.ok{background:var(--jade-soft);border-color:var(--jade);color:var(--jade)}
+.qopt.bad{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.qfb{min-height:46px;margin:12px 2px 6px;font-size:14px;color:var(--mute)}
+.qfb .zh{display:inline;margin:0;font:600 20px var(--serif);color:var(--ink)}
+</style></head><body>
+<header class="top">
+ <div class="brand"><span class="seal" aria-hidden="true">汉</span><div><h1>新HSK教程 1</h1><p class="sub">Audio Companion</p></div></div>
+ <nav class="menu" id="menu" aria-label="Lessons"></nav>
+</header>
+<main>
+ <section class="tools" aria-label="Playback settings">
+  <button class="btn ghost" id="spd">Speed: Slow</button>
+  <button class="btn ghost" id="stopBtn"><svg viewBox="0 0 12 12" aria-hidden="true"><rect x="1" y="1" width="10" height="10" rx="2" fill="currentColor"/></svg>Stop</button>
+  <button class="tog en is-on" id="trb" aria-pressed="true"><i></i>English after each line<span class="st">On</span></button>
+  <button class="tog ur is-on" id="urt" aria-pressed="true"><i></i>Urdu after each line<span class="st">On</span></button>
+ </section>
+ <div id="lesson"></div>
+ <p class="note" id="note"></p>
+ <p class="note">Respellings are approximate and do not show tones. Follow the pinyin tone marks and listen to the red speaker button. Urdu translations are simple wording and worth checking with an Urdu speaker. Urdu audio uses an Urdu voice installed on your device, or plays online audio when you are connected.</p>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const SP={
+ wang:["王一飞","Wang Yifei",1.25],chen:["陈天中","Chen Tianzhong",.75],bai:["白家月","Bai Jiayue",1.1],
+ xy:["小语","Xiaoyu",1.2],st:["学生们","Students",1],li:["李文","Li Wen",.8],an:["安妮","Annie",1.2],yx:["王一雪","Wang Yixue",1.15],lm:["刘明","Liu Ming",.8],yt:["杨同乐","Yang Tongle",.9],lx:["刘小雪","Liu Xiaoxue",1.4],lxm:["刘小明","Liu Xiaoming",1.3],hu:["胡医生","Dr. Hu",.85],sh:["售货员","Shop assistant",1],fw:["服务员","Waiter / Waitress",1.1]};
+const L=[
+{n:1,zh:"AI小语，你好！",en:"Hello, AI Xiaoyu!",
+ tw:["妈种麻，我放马。马吃麻，妈骂马。","Mā zhòng má, wǒ fàng mǎ. Mǎ chī má, mā mà mǎ.","Mom plants flax. I tend the horse. The horse eats the flax. Mom scolds the horse."],
+ t:[
+ {h:"课文 1 · Text 1",d:[["wang","AI小语，你好！","AI Xiǎoyǔ, nǐ hǎo!","Hello, AI Xiaoyu!"],["xy","王老师，你好！","Wáng lǎoshī, nǐ hǎo!","Hello, Ms. Wang!"]],
+  v:[["你好","nǐ hǎo","","hello"],["王老师","Wáng lǎoshī","","Ms. Wang (proper noun)"]]},
+ {h:"课文 2 · Text 2",d:[["wang","大家好！","Dàjiā hǎo!","Hello, everyone!"],["st","老师，您好！","Lǎoshī, nín hǎo!","Hello, teacher!"],["xy","你们好！","Nǐmen hǎo!","Hello, all!"],["st","你好，小语！","Nǐ hǎo, Xiǎoyǔ!","Hello, Xiaoyu!"]],
+  v:[["大家","dàjiā","pron.","everybody"],["好","hǎo","adj.","good; fine"],["学生","xuésheng","n.","student"],["们","men","suf.","plural marker"],["老师","lǎoshī","n.","teacher"],["您","nín","pron.","you (respectful)"],["你们","nǐmen","pron.","(plural) you"]]},
+ {h:"课文 3 · Text 3",d:[["st","谢谢！","Xièxie!","Thank you!"],["xy","不客气！","Bú kèqi!","You're welcome!"],["wang","同学们，再见！","Tóngxuémen, zàijiàn!","Goodbye, class!"],["st","老师，再见！","Lǎoshī, zàijiàn!","Goodbye, teacher!"]],
+  v:[["谢谢","xièxie","v.","thank you"],["不客气","bú kèqi","","you're welcome"],["同学","tóngxué","n.","classmate"],["再见","zàijiàn","v.","goodbye"]]}]},
+{n:2,zh:"我叫李文",en:"My name is Li Wen",t:[
+ {h:"课文 1 · Text 1",d:[["wang","请问，你叫什么名字？","Qǐngwèn, nǐ jiào shénme míngzi?","May I ask, what's your name?"],["chen","我叫陈天中。","Wǒ jiào Chén Tiānzhōng.","My name is Chen Tianzhong."]],
+  v:[["请问","qǐngwèn","v.","excuse me"],["你","nǐ","pron.","(singular) you"],["叫","jiào","v.","be called as"],["什么","shénme","pron.","what"],["名字","míngzi","n.","name"],["我","wǒ","pron.","I; me"]]},
+ {h:"课文 2 · Text 2",d:[["chen","你好，安妮！","Nǐ hǎo, Ānnī!","Hello, Annie!"],["bai","你好，陈天中！我不是安妮，我是白家月。","Nǐ hǎo, Chén Tiānzhōng! Wǒ bú shì Ānnī, wǒ shì Bái Jiāyuè.","Hello! I'm not Annie—I'm Bai Jiayue."],["chen","对不起！","Duìbuqǐ!","Sorry!"],["bai","没关系！","Méi guānxi!","It's okay!"]],
+  v:[["不","bù","adv.","not; no"],["是","shì","v.","be"],["对不起","duìbuqǐ","v.","sorry"],["没关系","méi guānxi","v.","that's all right"],["没事","méishì","v.","it doesn't matter"]]}]},
+{n:3,zh:"我是中国人",en:"I'm Chinese",t:[
+ {h:"课文 1 · Text 1",d:[["li","我是中国人。","Wǒ shì Zhōngguó rén.","I'm Chinese."],["bai","我是法国人。我的中文老师也是中国人。","Wǒ shì Fǎguó rén. Wǒ de Zhōngwén lǎoshī yě shì Zhōngguó rén.","I'm French. My Chinese teacher is also Chinese."]],
+  v:[["人","rén","n.","human; person"],["的","de","part.","used after an attributive"],["中国","Zhōngguó","","China"],["法国","Fǎguó","","France"],["中文","Zhōngwén","","Chinese language"]]},
+ {h:"课文 2 · Text 2",d:[["an","这是谁？","Zhè shì shéi?","Who is this?"],["chen","这是我女朋友。","Zhè shì wǒ nǚpéngyou.","This is my girlfriend."],["an","你女朋友是哪国人？","Nǐ nǚpéngyou shì nǎ guó rén?","What nationality is your girlfriend?"],["chen","她也是泰国人。","Tā yě shì Tàiguó rén.","She is also Thai."]],
+  v:[["这","zhè","pron.","this"],["谁","shéi/shuí","pron.","who"],["女朋友","nǚpéngyou","n.","girlfriend"],["哪","nǎ","pron.","which"],["国","guó","n.","country"],["她","tā","pron.","she; her"],["泰国","Tàiguó","","Thailand"]]},
+ {h:"课文 3 · Text 3",d:[["yx","喂，一飞！","Wèi, Yīfēi!","Hi, Yifei!"],["wang","姐姐！","Jiějie!","Sister!"],["yx","你工作还忙吗？","Nǐ gōngzuò hái máng ma?","Are you still busy with work?"],["wang","对，还很忙。你也很忙吗？","Duì, hái hěn máng. Nǐ yě hěn máng ma?","Yes, still very busy. Are you busy too?"],["yx","我不太忙。我们很想你。","Wǒ bú tài máng. Wǒmen hěn xiǎng nǐ.","I'm not too busy. We miss you a lot."],["wang","我也想你们。","Wǒ yě xiǎng nǐmen.","I miss you all too."]],
+  v:[["喂","wèi","int.","hello; hey"],["姐姐","jiějie","n.","elder sister"],["工作","gōngzuò","n.","job"],["还","hái","adv.","still"],["忙","máng","adj.","busy"],["吗","ma","part.","question particle"],["对","duì","adj.","right"],["太","tài","adv.","too; excessively"],["我们","wǒmen","pron.","we; us"],["想","xiǎng","v.","miss"]]}]},
+{n:4,zh:"我有两个孩子",en:"I have two children",t:[
+ {h:"课文 1 · Text 1",d:[["lm","一飞忙吗？","Yīfēi máng ma?","Is Yifei busy?"],["yx","她很忙。","Tā hěn máng.","She is very busy."],["lm","她有多少个学生？","Tā yǒu duōshao gè xuésheng?","How many students does she have?"],["yx","她有二十个学生。","Tā yǒu èrshí gè xuésheng.","She has twenty students."]],
+  v:[["有","yǒu","v.","have"],["多少","duōshao","pron.","how many/much"],["个","gè","m.","general measure word"]]},
+ {h:"课文 2 · Text 2",d:[["yx","我有两个哥哥，你呢？","Wǒ yǒu liǎng gè gēge, nǐ ne?","I have two elder brothers. How about you?"],["yt","我没有哥哥。","Wǒ méiyǒu gēge.","I don't have any elder brothers."],["yx","你家有几口人？","Nǐ jiā yǒu jǐ kǒu rén?","How many people are there in your family?"],["yt","我家有四口人，爸爸、妈妈、妹妹和我。","Wǒ jiā yǒu sì kǒu rén: bàba, māma, mèimei hé wǒ.","Four people: my dad, my mom, my younger sister, and me."]],
+  v:[["哥哥","gēge","n.","elder brother"],["呢","ne","part.","question particle"],["没有","méiyǒu","v.","not have"],["家","jiā","n.","family"],["几","jǐ","pron.","how many"],["口","kǒu","m.","for family members"],["爸爸","bàba","n.","father"],["妈妈","māma","n.","mother"],["妹妹","mèimei","n.","younger sister"],["和","hé","conj.","and"]]},
+ {h:"课文 3 · Text 3",d:[["yt","这是您儿子吗？","Zhè shì nín érzi ma?","Is this your son?"],["yx","是的。我有两个孩子，一个儿子，一个女儿。","Shì de. Wǒ yǒu liǎng gè háizi, yí gè érzi, yí gè nǚ'ér.","Yes. I have two children, a son and a daughter."],["yt","您儿子几岁？","Nín érzi jǐ suì?","How old is your son?"],["yx","他今年五岁。","Tā jīnnián wǔ suì.","He is five years old."],["yt","您女儿多大？","Nín nǚ'ér duō dà?","How old is your daughter?"],["yx","她今年十二。","Tā jīnnián shí'èr.","She is twelve."]],
+  v:[["儿子","érzi","n.","son"],["孩子","háizi","n.","children"],["女儿","nǚ'ér","n.","daughter"],["岁","suì","m.","year (of age)"],["他","tā","pron.","he; him"],["今年","jīnnián","n.","this year"],["多","duō","pron.","how; to what extent"],["大","dà","adj.","(of age) old"]]}]},
+{n:5,zh:"今天我休息",en:"I'm off today",t:[
+ {h:"课文 1 · Text 1",d:[["yx","今天几号？","Jīntiān jǐ hào?","What's the date today?"],["lm","今天9月8号。","Jīntiān jiǔ yuè bā hào.","It's September 8."],["yx","星期几？","Xīngqī jǐ?","What day is it today?"],["lm","星期日。今天我休息。","Xīngqīrì. Jīntiān wǒ xiūxi.","It's Sunday. I'm off today."]],
+  v:[["今天","jīntiān","n.","today"],["号","hào","m.","date"],["月","yuè","n.","month"],["日","rì","m.","day"],["星期","xīngqī","n.","week"],["星期日","Xīngqīrì","n.","Sunday"],["星期天","Xīngqītiān","n.","Sunday"],["休息","xiūxi","v.","have a rest"]]},
+ {h:"课文 2 · Text 2",d:[["yx","你会做饭吗？","Nǐ huì zuò fàn ma?","Do you know how to cook?"],["yt","我会做。","Wǒ huì zuò.","Yes, I do."],["yx","你会做什么？","Nǐ huì zuò shénme?","What dishes can you make?"],["yt","我会做面条儿、饺子，也会做一些菜。星期天我也做饭。","Wǒ huì zuò miàntiáor, jiǎozi, yě huì zuò yìxiē cài. Xīngqītiān wǒ yě zuò fàn.","I can make noodles, jiaozi and some dishes. I also cook on Sundays."]],
+  v:[["会","huì","mod.","can; be able to"],["做饭","zuò fàn","","cook"],["做","zuò","v.","make; produce"],["面条儿","miàntiáor","n.","noodles"],["饺子","jiǎozi","n.","jiaozi (dumplings)"],["一些","yìxiē","num.-m.","some"],["菜","cài","n.","dish; course"]]},
+ {h:"课文 3 · Text 3",d:[["yx","同乐，下班吗？","Tónglè, xiàbān ma?","Tongle, are you off work?"],["yt","下班。","Xiàbān.","Yes, I am."],["yx","这是你的新电脑吗？","Zhè shì nǐ de xīn diànnǎo ma?","Is this your new computer?"],["yt","是的，是我的新电脑。","Shì de, shì wǒ de xīn diànnǎo.","Yes, it's my new computer."],["yx","真好看！","Zhēn hǎokàn!","It looks really nice!"],["yt","我也很喜欢它。","Wǒ yě hěn xǐhuan tā.","I really like it too."]],
+  v:[["下班","xiàbān","v.","get off work"],["新","xīn","adj.","new"],["电脑","diànnǎo","n.","computer"],["真","zhēn","adv.","really; truly"],["好看","hǎokàn","adj.","good-looking; nice"],["喜欢","xǐhuan","v.","like"],["它","tā","pron.","it"]]}]},
+{n:6,zh:"你的手机号是多少？",en:"What's your cell phone number?",t:[
+ {h:"课文 1 · Text 1",d:[["li","家月，你的手机号是多少？","Jiāyuè, nǐ de shǒujīhào shì duōshao?","Jiayue, what's your cell phone number?"],["bai","我的手机号是+33 601493190。","Wǒ de shǒujīhào shì sān sān, liù líng yāo sì jiǔ sān yāo jiǔ líng.","My cell phone number is +33 601493190."],["li","我的手机号是+86 13552721160。","Wǒ de shǒujīhào shì bā liù, yāo sān wǔ wǔ èr qī èr yāo yāo liù líng.","My cell phone number is +86 13552721160."],["bai","好的。","Hǎo de.","Alright."]],
+  v:[["手机","shǒujī","n.","cell phone"],["电话","diànhuà","n.","telephone; phone call"],["号","hào","n.","number"]]},
+ {h:"课文 2 · Text 2",d:[["chen","家月，明天你去哪儿？","Jiāyuè, míngtiān nǐ qù nǎr?","Jiayue, where are you going tomorrow?"],["bai","我想去超市买东西。","Wǒ xiǎng qù chāoshì mǎi dōngxi.","I want to go to the supermarket to buy groceries."],["chen","你去超市买什么？","Nǐ qù chāoshì mǎi shénme?","What are you going to buy at the supermarket?"],["bai","我想买些牛奶。","Wǒ xiǎng mǎi xiē niúnǎi.","I want to buy some milk."]],
+  v:[["明天","míngtiān","n.","tomorrow"],["去","qù","v.","go to"],["哪儿","nǎr","pron.","where"],["想","xiǎng","mod.","want; would like"],["超市","chāoshì","n.","supermarket"],["买","mǎi","v.","buy"],["东西","dōngxi","n.","thing"],["些","xiē","m.","some; a few"],["牛奶","niúnǎi","n.","(cow's) milk"]]},
+ {h:"课文 3 · Text 3",d:[["yx","星期天我们去哪儿吃晚饭？","Xīngqītiān wǒmen qù nǎr chī wǎnfàn?","Where are we going for dinner on Sunday?"],["lm","我还想去西安饭店。","Wǒ hái xiǎng qù Xī'ān Fàndiàn.","I'd like to go to Xi'an Restaurant again."],["lx","那边的包子非常好吃，我想吃包子。","Nàbiān de bāozi fēicháng hǎochī, wǒ xiǎng chī bāozi.","The steamed buns there are very delicious. I'd love to eat some."],["lxm","妈妈，我想吃米饭，不想吃包子。","Māma, wǒ xiǎng chī mǐfàn, bù xiǎng chī bāozi.","Mom, I'd rather have rice, not steamed buns."],["yx","好的。我们怎么去？","Hǎo de. Wǒmen zěnme qù?","Alright. How shall we get there?"],["lm","坐出租车去。","Zuò chūzūchē qù.","Let's take a taxi."]],
+  v:[["吃","chī","v.","eat; have"],["晚饭","wǎnfàn","n.","dinner; supper"],["那边","nàbiān","pron.","there"],["包子","bāozi","n.","steamed stuffed bun"],["非常","fēicháng","adv.","very; extremely"],["好吃","hǎochī","adj.","tasty; delicious"],["米饭","mǐfàn","n.","(cooked) rice"],["怎么","zěnme","pron.","how"],["坐","zuò","v.","take; travel by"],["出租车","chūzūchē","n.","taxi"],["西安饭店","Xī'ān Fàndiàn","","Xi'an Restaurant"]]}]},
+{n:7,zh:"我晚上六点半下班",en:"I'll finish work at 6:30 in the evening",t:[
+ {h:"课文 1 · Text 1",d:[["bai","现在几点？","Xiànzài jǐ diǎn?","What time is it now?"],["an","早上八点四十。","Zǎoshang bā diǎn sìshí.","It's 8:40 in the morning."],["bai","我上午十点十分有课。","Wǒ shàngwǔ shí diǎn shí fēn yǒu kè.","I have a class at 10:10 in the morning."],["an","好的，我们下午两点见吧。","Hǎo de, wǒmen xiàwǔ liǎng diǎn jiàn ba.","Alright, let's meet at 2:00 in the afternoon."]],
+  v:[["现在","xiànzài","n.","now"],["点","diǎn","m.","o'clock"],["早上","zǎoshang","n.","(early) morning"],["上午","shàngwǔ","n.","morning"],["分","fēn","m.","minute"],["课","kè","n.","class; lesson"],["下午","xiàwǔ","n.","afternoon"],["见","jiàn","v.","meet"],["吧","ba","part.","suggestion particle"]]},
+ {h:"课文 2 · Text 2",d:[["li","下午我想去电影院看电影，你去吗？","Xiàwǔ wǒ xiǎng qù diànyǐngyuàn kàn diànyǐng, nǐ qù ma?","I want to watch a movie at the cinema this afternoon. Are you going?"],["bai","我不想去，下午还有事。","Wǒ bù xiǎng qù, xiàwǔ hái yǒu shì.","I don't want to go. I still have something to do."],["li","好的。明天呢？","Hǎo de. Míngtiān ne?","Okay. How about tomorrow?"],["bai","我明天下午两点还上课呢，四点半下课。","Wǒ míngtiān xiàwǔ liǎng diǎn hái shàngkè ne, sì diǎn bàn xiàkè.","I have a class tomorrow at 2:00 and it finishes at 4:30."]],
+  v:[["电影院","diànyǐngyuàn","n.","cinema"],["看","kàn","v.","watch; see; read; look at"],["电影","diànyǐng","n.","movie; film"],["事","shì","n.","thing; affair"],["上课","shàngkè","v.","attend a class"],["呢","ne","part.","marker of a declarative sentence"],["半","bàn","num.","half"],["下课","xiàkè","v.","dismiss a class"]]},
+ {h:"课文 3 · Text 3",d:[["yx","喂，你在哪儿呢？","Wèi, nǐ zài nǎr ne?","Hey, where are you?"],["lm","我在家里呢。","Wǒ zài jiāli ne.","I'm at home."],["yx","我晚上六点半下班。","Wǒ wǎnshang liù diǎn bàn xiàbān.","I'll finish work at 6:30 in the evening."],["lm","我八点去医院上班。","Wǒ bā diǎn qù yīyuàn shàngbān.","I'll go to work at the hospital at 8:00."],["yx","好的，你去店里买些菜吧。","Hǎo de, nǐ qù diànli mǎi xiē cài ba.","Alright, could you go to the store to buy some vegetables?"],["lm","好，我十分钟后去。","Hǎo, wǒ shí fēnzhōng hòu qù.","Okay, I'll go in ten minutes."]],
+  v:[["在","zài","v.","be at/in/on"],["里","lǐ","n.","inner; inside"],["晚上","wǎnshang","n.","evening"],["医院","yīyuàn","n.","hospital"],["上班","shàngbān","v.","go to work"],["店","diàn","n.","shop; store"],["分钟","fēnzhōng","n.","minute"],["后","hòu","n.","after; later"]]}]},
+{n:8,zh:"我爸爸也在医院工作",en:"My father also works at a hospital",t:[
+ {h:"课文 1 · Text 1",d:[["bai","房间外有一只小猫。","Fángjiān wài yǒu yì zhī xiǎo māo.","There is a little cat outside the room."],["chen","我没看见，它在哪儿呢？","Wǒ méi kànjiàn, tā zài nǎr ne?","I don't see it. Where is it?"],["bai","它在桌子下呢。","Tā zài zhuōzi xià ne.","It's under the table."],["chen","这只小猫真漂亮！","Zhè zhī xiǎo māo zhēn piàoliang!","This little cat is so beautiful!"]],
+  v:[["房间","fángjiān","n.","room"],["外","wài","n.","outside"],["只","zhī","m.","for certain animals"],["小","xiǎo","adj.","small; little"],["猫","māo","n.","cat"],["没","méi","adv.","no; not; not yet"],["看见","kànjiàn","v.","see; catch sight of"],["桌子","zhuōzi","n.","table; desk"],["下","xià","n.","low position or rank"],["漂亮","piàoliang","adj.","pretty; beautiful"]]},
+ {h:"课文 2 · Text 2",d:[["bai","我们在哪儿见呢？","Wǒmen zài nǎr jiàn ne?","Where shall we meet?"],["li","在学校书店前见吧。","Zài xuéxiào shūdiàn qián jiàn ba.","Let's meet in front of the school bookstore."],["bai","好的。下午两点你能到吗？","Hǎo de. Xiàwǔ liǎng diǎn nǐ néng dào ma?","Okay. Can you arrive at 2:00 in the afternoon?"],["li","我能到。我在学校吃午饭。","Wǒ néng dào. Wǒ zài xuéxiào chī wǔfàn.","Yes, I can. I'll have lunch at school."]],
+  v:[["在","zài","prep.","at/in"],["学校","xuéxiào","n.","school"],["书店","shūdiàn","n.","bookstore"],["前","qián","n.","front"],["能","néng","mod.","can; be able to"],["到","dào","v.","arrive; reach"],["午饭","wǔfàn","n.","lunch"]]},
+ {h:"课文 3 · Text 3",d:[["lm","小胡，还没吃饭呢？","Xiǎo Hú, hái méi chī fàn ne?","Xiao Hu, haven't you eaten yet?"],["hu","没吃呢。","Méi chī ne.","No, I haven't."],["lm","大医院病人多，医生非常忙。","Dà yīyuàn bìngrén duō, yīshēng fēicháng máng.","There are a lot of patients in big hospitals, and doctors are very busy."],["hu","是的。我爸爸也在医院工作，他也非常忙。","Shì de. Wǒ bàba yě zài yīyuàn gōngzuò, tā yě fēicháng máng.","True. My father also works at a hospital, and he's extremely busy too."],["lm","你家有两个医生？","Nǐ jiā yǒu liǎng gè yīshēng?","So there are two doctors in your family?"],["hu","对。","Duì.","Yes."]],
+  v:[["饭","fàn","n.","meal"],["大","dà","adj.","big; large"],["病人","bìngrén","n.","patient"],["多","duō","adj.","many; much"],["医生","yīshēng","n.","doctor"],["工作","gōngzuò","v.","work"],["胡医生","Hú yīshēng","","Dr. Hu"]]}]}
+,{n:9,zh:"我明天上午在学校学习",en:"I'll be studying at school tomorrow morning",t:[
+ {h:"课文 1 · Text 1",d:[["li","学校前边有一家电影院。","Xuéxiào qiánbian yǒu yì jiā diànyǐngyuàn.","There is a cinema in front of the school."],["bai","对。我们晚上去那个电影院看电影吧。","Duì. Wǒmen wǎnshang qù nàge diànyǐngyuàn kàn diànyǐng ba.","Yes. Let's go to the cinema to watch a movie tonight."],["li","好！我们七点在电影院外边见，好吗？","Hǎo! Wǒmen qī diǎn zài diànyǐngyuàn wàibian jiàn, hǎo ma?","Great! Let's meet outside the cinema at 7:00, okay?"],["bai","好的，晚上七点见！","Hǎo de, wǎnshang qī diǎn jiàn!","Okay, see you at 7:00 in the evening!"]],
+  v:[["前边","qiánbian","n.","front"],["边","bian/biān","suf./n.","indicating locality; edge; side"],["家","jiā","m.","for families or enterprises"],["那个","nàge","pron.","that"],["外边","wàibian","n.","outside"]]},
+ {h:"课文 2 · Text 2",d:[["bai","椅子上有一本中文书，那是谁的书？","Yǐzi shang yǒu yì běn Zhōngwén shū, nà shì shéi de shū?","There is a Chinese book on the chair. Whose book is that?"],["chen","是我的书，谢谢。这是我的第二本中文书。","Shì wǒ de shū, xièxie. Zhè shì wǒ de dì-èr běn Zhōngwén shū.","It's my book. Thank you. This is my second Chinese book."],["bai","不客气。你明天上午在哪儿？","Bú kèqi. Nǐ míngtiān shàngwǔ zài nǎr?","You're welcome. Where will you be tomorrow morning?"],["chen","我明天上午在学校学习。","Wǒ míngtiān shàngwǔ zài xuéxiào xuéxí.","I'll be studying at school tomorrow morning."]],
+  v:[["椅子","yǐzi","n.","chair"],["上","shang/shàng","n.","used after a noun, indicating position; higher position"],["本","běn","m.","for books"],["书","shū","n.","book"],["那","nà","pron.","that"],["第","dì","pref.","marker of ordinal numbers"],["学习","xuéxí","v.","study; learn"]]},
+ {h:"课文 3 · Text 3",d:[["yx","明天星期六，你做什么？","Míngtiān Xīngqīliù, nǐ zuò shénme?","Tomorrow is Saturday. What are you going to do?"],["yt","我白天在家里读书，晚上和朋友们去外边唱歌。","Wǒ báitiān zài jiāli dúshū, wǎnshang hé péngyoumen qù wàibian chàng gē.","I will read at home during the day and go out to sing with my friends in the evening."],["yx","你唱歌很好听。","Nǐ chàng gē hěn hǎotīng.","You sing very well."],["yt","谢谢！您星期六做什么？","Xièxie! Nín Xīngqīliù zuò shénme?","Thank you! What do you do on Saturday?"],["yx","我在家里做饭、看电视，和孩子们、小狗玩。","Wǒ zài jiāli zuò fàn, kàn diànshì, hé háizimen, xiǎo gǒu wán.","I will cook, watch TV, and play with my children and my little dog at home."],["yt","我也有一只小狗。","Wǒ yě yǒu yì zhī xiǎo gǒu.","I also have a little dog."]],
+  v:[["做","zuò","v.","do; engage in"],["白天","báitiān","n.","day; daytime"],["读书","dúshū","v.","read a book"],["和","hé","prep.","with"],["朋友","péngyou","n.","friend"],["唱","chàng","v.","sing"],["歌","gē","n.","song"],["好听","hǎotīng","adj.","pleasant to hear"],["电视","diànshì","n.","television"],["狗","gǒu","n.","dog"],["玩","wán","v.","play; have fun"]]}]}
+,{n:10,zh:"这儿的苹果真便宜！",en:"The apples here are really cheap!",t:[
+ {h:"课文 1 · Text 1",d:[["yx","请问，有杯子吗？","Qǐngwèn, yǒu bēizi ma?","Excuse me, do you have any cups?"],["sh","有，杯子在这边。","Yǒu, bēizi zài zhèbiān.","Yes, the cups are over here."],["yx","多少钱一个？","Duōshao qián yí gè?","How much is one?"],["sh","这些五块钱一个，那些十块钱一个。","Zhèxiē wǔ kuài qián yí gè, nàxiē shí kuài qián yí gè.","These are five yuan each, and those are ten yuan each."],["yx","我买这个吧。","Wǒ mǎi zhège ba.","I'll take this one, please."]],
+  v:[["杯子","bēizi","n.","cup; glass"],["售货员","shòuhuòyuán","n.","shop assistant; salesperson; vendor"],["这边","zhèbiān","pron.","here; this side"],["钱","qián","n.","money"],["这些","zhèxiē","pron.","these"],["块","kuài","m.","for silver dollars or paper money"],["那些","nàxiē","pron.","those"]]},
+ {h:"课文 2 · Text 2",d:[["yx","这儿的水果真不少！","Zhèr de shuǐguǒ zhēn bù shǎo!","There's so much fruit here!"],["sh","您想买什么？","Nín xiǎng mǎi shénme?","What would you like to buy?"],["yx","我想买两斤苹果。","Wǒ xiǎng mǎi liǎng jīn píngguǒ.","I'd like two jin of apples, please."],["sh","苹果三块五一斤。这些七块二，七块钱吧。","Píngguǒ sān kuài wǔ yì jīn. Zhèxiē qī kuài èr, qī kuài qián ba.","The apples are 3.5 yuan per jin. That's 7.2 yuan in total, let's round it down to 7 yuan."],["yx","好的，这儿的苹果真便宜！","Hǎo de, zhèr de píngguǒ zhēn piányi!","Great! The apples here are really affordable!"]],
+  v:[["这儿","zhèr","pron.","here"],["水果","shuǐguǒ","n.","fruit"],["少","shǎo","adj.","few; little"],["斤","jīn","m.","jin (half a kilogram)"],["苹果","píngguǒ","n.","apple"],["便宜","piányi","adj.","cheap; affordable"]]},
+ {h:"课文 3 · Text 3",d:[["yx","这家商店衣服真多！这件一百元，怎么样？","Zhè jiā shāngdiàn yīfu zhēn duō! Zhè jiàn yìbǎi yuán, zěnmeyàng?","There are so many clothes in this store! This one is 100 yuan. What do you think?"],["lm","好看，也不贵。","Hǎokàn, yě bú guì.","It looks great, and it's not expensive."],["yx","小雪能穿，买一件吧。","Xiǎoxuě néng chuān, mǎi yí jiàn ba.","Xiaoxue can wear it. Let's get one."],["lm","好的。小明能穿吗？","Hǎo de. Xiǎomíng néng chuān ma?","Okay. Do you think Xiaoming can wear it too?"],["yx","不能。这些是女孩子穿的衣服，男孩子的衣服在那儿。","Bù néng. Zhèxiē shì nǚ háizi chuān de yīfu, nán háizi de yīfu zài nàr.","No. These are girls' clothes. The boys' section is over there."],["lm","好的。","Hǎo de.","Alright."]],
+  v:[["商店","shāngdiàn","n.","shop; store"],["衣服","yīfu","n.","clothes"],["件","jiàn","m.","piece"],["元","yuán","m.","yuan"],["怎么样","zěnmeyàng","pron.","how (asking about nature, condition, manner)"],["贵","guì","adj.","expensive"],["穿","chuān","v.","wear; put on"],["女","nǚ","adj.","female; woman"],["男","nán","adj.","male; man"],["那儿","nàr","pron.","there; that place"]]}]}
+,{n:11,zh:"我读大学呢",en:"I'm studying at university",t:[{h:"课文 1 · Text 1",d:[["wang", "喂，李文，你什么时候能到饭店？", "Wèi, Lǐ Wén, nǐ shénme shíhou néng dào fàndiàn?", "Hello, Li Wen. When will you arrive at the restaurant?"], ["li", "还不知道，正在找呢。它是不是在超市后边？", "Hái bù zhīdào, zhèngzài zhǎo ne. Tā shì bu shì zài chāoshì hòubian?", "Not sure yet. I'm looking for it now. Is it behind the supermarket?"], ["wang", "是的。你开车没开车？", "Shì de. Nǐ kāichē méi kāichē?", "Yes, it is. Are you driving or not?"], ["li", "我没开车，坐车呢。", "Wǒ méi kāichē, zuò chē ne.", "No, I'm not driving. I'm taking a taxi."]],v:[["时候", "shíhou", "n.", "(a point in) time"], ["饭店", "fàndiàn", "n.", "restaurant"], ["知道", "zhīdào", "v.", "know; realize"], ["正在", "zhèngzài", "adv.", "in the process of"], ["找", "zhǎo", "v.", "look for"], ["开车", "kāichē", "v.", "drive (a vehicle)"], ["车", "chē", "n.", "vehicle"]]},
+{h:"课文 2 · Text 2",d:[["wang", "你还在读大学吗？", "Nǐ hái zài dú dàxué ma?", "Are you still studying at university?"], ["li", "对，我读大学呢，还是大学生。", "Duì, wǒ dú dàxué ne, hái shì dàxuéshēng.", "Yes. I'm studying at university, and I'm still an undergraduate."], ["wang", "你们学习忙不忙？", "Nǐmen xuéxí máng bu máng?", "Are you busy with your studies?"], ["li", "非常忙，我学医，我们的课很多。", "Fēicháng máng, wǒ xué yī, wǒmen de kè hěn duō.", "Very busy. I major in medicine, and we have a lot of classes."]],v:[["在", "zài", "adv.", "used to indicate an action in progress"], ["读", "dú", "v.", "attend school; study"], ["大学", "dàxué", "n.", "university; college"], ["大学生", "dàxuéshēng", "n.", "college/university student"], ["学", "xué", "v.", "study; learn"], ["医", "yī", "n.", "medicine"]]},
+{h:"课文 3 · Text 3",d:[["lm", "弟弟起床没起床呢？", "Dìdi qǐchuáng méi qǐchuáng ne?", "Has your younger brother gotten up yet?"], ["lx", "没起床呢，还在睡觉。", "Méi qǐchuáng ne, hái zài shuìjiào.", "No, he hasn't gotten up yet. He's still sleeping."], ["lm", "还睡呢？他今天去不去那里？", "Hái shuì ne? Tā jīntiān qù bu qù nàli?", "Still sleeping? Is he going there today?"], ["lx", "去哪里？", "Qù nǎlǐ?", "Where?"], ["lm", "去超市。", "Qù chāoshì.", "To the supermarket."], ["lx", "我昨天问他，他对我说，他不去，他今天要和小朋友玩。", "Wǒ zuótiān wèn tā, tā duì wǒ shuō, tā bú qù, tā jīntiān yào hé xiǎopéngyou wán.", "I asked him yesterday. He told me he wasn't going. He's going to play with his friends today."]],v:[["弟弟", "dìdi", "n.", "younger brother"], ["起床", "qǐchuáng", "v.", "get up; get out of bed"], ["睡觉", "shuìjiào", "v.", "sleep"], ["睡", "shuì", "v.", "sleep"], ["那里", "nàlǐ", "pron.", "there; that place"], ["哪里", "nǎlǐ", "pron.", "where"], ["昨天", "zuótiān", "n.", "yesterday"], ["问", "wèn", "v.", "ask"], ["对", "duì", "prep.", "to; towards"], ["说", "shuō", "v.", "speak; talk; say"], ["要", "yào", "mod.", "want; wish"], ["小朋友", "xiǎopéngyou", "n.", "child; kid"]]}]}
+,{n:12,zh:"昨天下雪了",en:"It snowed yesterday",t:[{h:"课文 1 · Text 1",d:[["yx", "今天天气怎么样？", "Jīntiān tiānqì zěnmeyàng?", "How's the weather today?"], ["wang", "这里的天不太好，下雨了。", "Zhèlǐ de tiān bú tài hǎo, xià yǔ le.", "It's not great here. It's raining."], ["yx", "雨大吗？", "Yǔ dà ma?", "Is it raining heavily?"], ["wang", "有点儿大，我觉得很冷。", "Yǒudiǎnr dà, wǒ juéde hěn lěng.", "A bit, and I feel really cold."]],v:[["天气", "tiānqì", "n.", "weather"], ["这里", "zhèlǐ", "pron.", "here"], ["天", "tiān", "n.", "weather; day"], ["下雨", "xià yǔ", "", "rain"], ["了", "le", "part.", "used at the end of a sentence to indicate a change of situation or state"], ["雨", "yǔ", "n.", "rain"], ["有点儿", "yǒudiǎnr", "adv.", "rather; a bit"], ["觉得", "juéde", "v.", "feel"], ["冷", "lěng", "adj.", "cold"]]},
+{h:"课文 2 · Text 2",d:[["yx", "昨天下雪了。", "Zuótiān xià xuě le.", "It snowed yesterday."], ["yt", "是的，太冷了。", "Shì de, tài lěng le.", "Yes, it was so cold."], ["yx", "你昨天没来公司，生病了？", "Nǐ zuótiān méi lái gōngsī, shēngbìng le?", "You didn't come to the company yesterday. Were you feeling unwell?"], ["yt", "对，我昨天去医院看病了。", "Duì, wǒ zuótiān qù yīyuàn kànbìng le.", "Yes, I went to the hospital to see a doctor."]],v:[["下", "xià", "v.", "(of rain, snow, etc.) come down; fall"], ["雪", "xuě", "n.", "snow"], ["来", "lái", "v.", "come"], ["公司", "gōngsī", "n.", "company"], ["生病", "shēngbìng", "v.", "fall ill"], ["看病", "kànbìng", "v.", "(of a patient) see a doctor"]]},
+{h:"课文 3 · Text 3",d:[["yt", "医生，我病了。", "Yīshēng, wǒ bìng le.", "Doctor, I'm not feeling well."], ["hu", "我看看。你觉得怎么样？", "Wǒ kànkan. Nǐ juéde zěnmeyàng?", "Let me take a look. How are you feeling?"], ["yt", "我很冷。", "Wǒ hěn lěng.", "I feel very cold."], ["hu", "好的，吃一点儿药，今天休息半天吧。", "Hǎo de, chī yìdiǎnr yào, jīntiān xiūxi bàn tiān ba.", "Alright. Take some medicine and rest for half a day today."], ["yt", "好的。", "Hǎo de.", "OK."], ["hu", "回家后再喝些热水。", "Huí jiā hòu zài hē xiē rè shuǐ.", "Make sure to drink some warm water after you get home."]],v:[["病", "bìng", "v.", "fall ill; be sick"], ["一点儿", "yìdiǎnr", "num.-m.", "some"], ["药", "yào", "n.", "medicine"], ["回", "huí", "v.", "return; go back"], ["再", "zài", "adv.", "then; only then"], ["喝", "hē", "v.", "drink"], ["热", "rè", "adj.", "hot; warm"], ["水", "shuǐ", "n.", "water"]]}]}
+,{n:13,zh:"请给我一杯茶",en:"I'll have a cup of tea, please",t:[{h:"课文 1 · Text 1",d:[["bai", "王老师，我可以再问您一个问题吗？", "Wáng lǎoshī, wǒ kěyǐ zài wèn nín yí gè wèntí ma?", "Ms. Wang, may I ask you one more question?"], ["wang", "可以。你有什么问题？", "Kěyǐ. Nǐ yǒu shénme wèntí?", "Yes, of course. What's your question?"], ["bai", "那个小店卖不卖手机？", "Nàge xiǎo diàn mài bu mài shǒujī?", "Does that small shop sell cell phones?"], ["wang", "我不知道。你可以打电话问一下。", "Wǒ bù zhīdào. Nǐ kěyǐ dǎ diànhuà wèn yíxià.", "I'm not sure. You can call to ask."]],v:[["可以", "kěyǐ", "mod.", "can; may"], ["再", "zài", "adv.", "once more; again"], ["问题", "wèntí", "n.", "question; problem"], ["卖", "mài", "v.", "sell"], ["打电话", "dǎ diànhuà", "", "make a phone call; call"], ["一下", "yíxià", "num.-m.", "(used after a verb as its complement) one time; once"]]},
+{h:"课文 2 · Text 2",d:[["fw", "女士，请坐！您喝什么？", "Nǚshì, qǐng zuò! Nín hē shénme?", "Madam, have a seat, please! What would you like to drink?"], ["yx", "我看一下。请给我一杯牛奶。", "Wǒ kàn yíxià. Qǐng gěi wǒ yì bēi niúnǎi.", "Let me have a look. I'll have a glass of milk, please."], ["fw", "好的。您还要什么？", "Hǎo de. Nín hái yào shénme?", "Alright. Would you like anything else?"], ["yx", "我还没吃早饭，再要这个面包和鸡蛋吧。", "Wǒ hái méi chī zǎofàn, zài yào zhège miànbāo hé jīdàn ba.", "I haven't had breakfast yet, so I'll have a fried egg on bread."]],v:[["服务员", "fúwùyuán", "n.", "attendant; waiter; waitress"], ["女士", "nǚshì", "n.", "lady; madam"], ["请", "qǐng", "v.", "please"], ["坐", "zuò", "v.", "sit"], ["给", "gěi", "v.", "give"], ["杯", "bēi", "n.", "cup; glass"], ["要", "yào", "v.", "demand; ask for"], ["早饭", "zǎofàn", "n.", "breakfast"], ["这个", "zhège", "pron.", "this"], ["面包", "miànbāo", "n.", "bread"], ["鸡蛋", "jīdàn", "n.", "(hen's) egg"]]},
+{h:"课文 3 · Text 3",d:[["fw", "先生，请坐！您要什么？", "Xiānsheng, qǐng zuò! Nín yào shénme?", "Sir, have a seat, please! What would you like to order?"], ["lm", "我要一斤饺子。", "Wǒ yào yì jīn jiǎozi.", "I'd like one jin of jiaozi."], ["fw", "好的。一斤饺子四十个。", "Hǎo de. Yì jīn jiǎozi sìshí gè.", "Alright. One jin of jiaozi has forty pieces."], ["lm", "四十个太多了，我要一半吧。", "Sìshí gè tài duō le, wǒ yào yíbàn ba.", "Forty is too many. I'll have half of that."], ["fw", "半斤二十个。您想喝什么？", "Bàn jīn èrshí gè. Nín xiǎng hē shénme?", "Half is twenty. What would you like to drink?"], ["lm", "请给我一杯茶吧。", "Qǐng gěi wǒ yì bēi chá ba.", "I'll have a cup of tea, please."]],v:[["先生", "xiānsheng", "n.", "gentleman; sir"], ["一半", "yíbàn", "num.", "one half; half"], ["茶", "chá", "n.", "tea"]]}]}
+,{n:14,zh:"我看了一个电影",en:"I watched a movie",t:[{h:"课文 1 · Text 1",d:[["bai", "你们上火车后看见王老师了吗？", "Nǐmen shàng huǒchē hòu kànjiàn Wáng lǎoshī le ma?", "Did you see Ms. Wang after boarding the train?"], ["chen", "没看见。中午车开后，有些人在看书，有些人睡觉了。", "Méi kànjiàn. Zhōngwǔ chē kāi hòu, yǒuxiē rén zài kàn shū, yǒuxiē rén shuìjiào le.", "No, we didn't. After the train departed at noon, some people were reading, while others fell asleep."], ["bai", "你呢？", "Nǐ ne?", "What about you?"], ["chen", "我看了一个电影。", "Wǒ kànle yí gè diànyǐng.", "I watched a movie."]],v:[["上", "shàng", "v.", "go up; get on; board"], ["火车", "huǒchē", "n.", "train"], ["中午", "zhōngwǔ", "n.", "noon"], ["开", "kāi", "v.", "(of vehicles) depart; leave"], ["有些", "yǒuxiē", "pron.", "(indicating a part) some"], ["有的", "yǒude", "pron.", "some"], ["了", "le", "part.", "used after a verb to indicate the completion of an action"]]},
+{h:"课文 2 · Text 2",d:[["wang", "你们会说汉语了，也会写汉字了吗？", "Nǐmen huì shuō Hànyǔ le, yě huì xiě Hànzì le ma?", "You can speak Chinese now. Can you also write Chinese characters?"], ["bai", "我们都会写了。", "Wǒmen dōu huì xiě le.", "We can all write them now."], ["chen", "老师，我听不见。", "Lǎoshī, wǒ tīng bú jiàn.", "Teacher, I can't hear you."], ["wang", "请大家不要说话！请听老师的问题：你们都会写哪些汉字了？", "Qǐng dàjiā búyào shuōhuà! Qǐng tīng lǎoshī de wèntí: Nǐmen dōu huì xiě nǎxiē Hànzì le?", "Everyone, please stop talking! Listen to my question: Which Chinese characters can you write?"], ["chen", "我会写这些字了，您看！", "Wǒ huì xiě zhèxiē zì le, nín kàn!", "I can write these characters. Look!"]],v:[["写", "xiě", "v.", "write"], ["都", "dōu", "adv.", "all; both"], ["听见", "tīngjiàn", "v.", "hear"], ["不要", "búyào", "adv.", "don't"], ["说话", "shuōhuà", "v.", "say; speak; talk"], ["听", "tīng", "v.", "listen to; hear"], ["哪些", "nǎxiē", "pron.", "which"], ["字", "zì", "n.", "character; word"], ["汉语", "Hànyǔ", "", "Chinese language"], ["汉字", "Hànzì", "", "Chinese character"]]},
+{h:"课文 3 · Text 3",d:[["lm", "明年女儿上中学。", "Míngnián nǚ'ér shàng zhōngxué.", "Our daughter will start middle school next year."], ["yx", "对。儿子也上小学了。", "Duì. Érzi yě shàng xiǎoxué le.", "That's right. Our son will also start primary school."], ["lm", "我们家有了一个中学生。", "Wǒmen jiā yǒule yí gè zhōngxuéshēng.", "We will have a middle school student in our family."], ["yx", "还有了一个小学生。", "Hái yǒule yí gè xiǎoxuéshēng.", "And a primary school student."], ["lm", "上学后，他们都忙了。", "Shàngxué hòu, tāmen dōu máng le.", "Once they start school, they will both be busy."], ["yx", "是的。太晚了，睡觉吧。", "Shì de. Tài wǎn le, shuìjiào ba.", "Yes. It's too late. Let's go to bed."]],v:[["明年", "míngnián", "n.", "next year"], ["上", "shàng", "v.", "begin to do sth at a fixed time"], ["中学", "zhōngxué", "n.", "middle school"], ["小学", "xiǎoxué", "n.", "primary school"], ["中学生", "zhōngxuéshēng", "n.", "middle school student"], ["小学生", "xiǎoxuéshēng", "n.", "primary school student; pupil"], ["上学", "shàngxué", "v.", "start school; go to school"], ["他们", "tāmen", "pron.", "they; them"], ["她们", "tāmen", "pron.", "(referring to female people) they; them"], ["它们", "tāmen", "pron.", "(plural of 它) they; them; their"], ["晚", "wǎn", "adj.", "late"]]}]}
+,{n:15,zh:"大兴机场见！",en:"See you at Daxing Airport!",t:[{h:"课文 1 · Text 1",d:[["bai", "王老师，下个星期六我回法国。", "Wáng lǎoshī, xià gè xīngqīliù wǒ huí Fǎguó.", "Ms. Wang, I'm going back to France next Saturday."], ["wang", "你坐飞机回去吗？", "Nǐ zuò fēijī huíqù ma?", "Are you flying back?"], ["bai", "对，坐飞机。", "Duì, zuò fēijī.", "Yes, by plane."], ["wang", "飞机几点走？", "Fēijī jǐ diǎn zǒu?", "What time does the plane leave?"], ["bai", "下午三点。", "Xiàwǔ sān diǎn.", "At three in the afternoon."], ["wang", "好。你下午一点到机场吧。", "Hǎo. Nǐ xiàwǔ yī diǎn dào jīchǎng ba.", "OK. Get to the airport at one in the afternoon."]],v:[["下个", "xià gè", "", "next (one)"], ["星期六", "xīngqīliù", "n.", "Saturday"], ["回", "huí", "v.", "return; go back"], ["回去", "huíqù", "v.", "go back"], ["飞机", "fēijī", "n.", "airplane"], ["走", "zǒu", "v.", "leave; go"], ["机场", "jīchǎng", "n.", "airport"]]},
+
+{h:"课文 2 · Text 2",d:[["li", "家月，这是大兴机场。这儿真大！", "Jiāyuè, zhè shì Dàxīng Jīchǎng. Zhèr zhēn dà!", "Jiayue, this is Daxing Airport. It's really big here!"], ["bai", "是啊。现在几点？", "Shì a. Xiànzài jǐ diǎn?", "Yes, it is. What time is it now?"], ["li", "现在十二点半。还早呢，你不要忙。", "Xiànzài shí'èr diǎn bàn. Hái zǎo ne, nǐ búyào máng.", "It's half past twelve. It's still early, so don't rush."], ["li", "你的飞机票呢？", "Nǐ de fēijī piào ne?", "Where's your plane ticket?"], ["bai", "在手机里，你看！", "Zài shǒujī lǐ, nǐ kàn!", "It's in my phone. Look!"], ["li", "好。我们去喝杯茶吧。", "Hǎo. Wǒmen qù hē bēi chá ba.", "OK. Let's go and have a cup of tea."], ["bai", "好的。你到法国后，给我打电话。", "Hǎo de. Nǐ dào Fǎguó hòu, gěi wǒ dǎ diànhuà.", "OK. Call me after you get to France."], ["li", "好的。我也想你们。", "Hǎo de. Wǒ yě xiǎng nǐmen.", "OK. I'll miss you all too."]],v:[["大兴机场", "Dàxīng Jīchǎng", "", "Daxing Airport"], ["飞机票", "fēijī piào", "n.", "plane ticket"], ["票", "piào", "n.", "ticket"], ["早", "zǎo", "adj.", "early"], ["啊", "a", "part.", "particle of agreement or surprise"], ["给", "gěi", "prep.", "to; for"], ["打电话", "dǎ diànhuà", "", "make a phone call"]]},
+
+{h:"课文 3 · Text 3",d:[["wang", "同学们，你们都到了吗？", "Tóngxuémen, nǐmen dōu dào le ma?", "Class, have you all arrived?"], ["st", "到了！", "Dào le!", "We're here!"], ["wang", "这一年，你们学了不少汉语，也会写汉字了。", "Zhè yì nián, nǐmen xuéle bù shǎo Hànyǔ, yě huì xiě Hànzì le.", "This year you've learned quite a lot of Chinese, and you can write characters too."], ["bai", "谢谢您，王老师！", "Xièxie nín, Wáng lǎoshī!", "Thank you, Ms. Wang!"], ["chen", "老师，我们很想您！", "Lǎoshī, wǒmen hěn xiǎng nín!", "Teacher, we'll miss you a lot!"], ["wang", "我也想你们。明年你们再来中国吧！", "Wǒ yě xiǎng nǐmen. Míngnián nǐmen zài lái Zhōngguó ba!", "I'll miss you too. Come to China again next year!"], ["st", "好！大兴机场见！", "Hǎo! Dàxīng Jīchǎng jiàn!", "OK! See you at Daxing Airport!"], ["wang", "同学们，再见！", "Tóngxuémen, zàijiàn!", "Goodbye, class!"], ["st", "老师，再见！", "Lǎoshī, zàijiàn!", "Goodbye, teacher!"]],v:[["年", "nián", "n.", "year"], ["来", "lái", "v.", "come"], ["学", "xué", "v.", "study; learn"], ["见", "jiàn", "v.", "meet; see"]]}]}
+];
+const T=["AI小语，你好！","我叫李文","我是中国人","我有两个孩子","今天我休息","你的手机号是多少？","我晚上六点半下班","我爸爸也在医院工作","我明天上午在学校学习","这儿的苹果真便宜！","我读大学呢","昨天下雪了","请给我一杯茶","我看了一个电影","大兴机场见！"];
+const PR={
+"AI小语，你好！":["ay-eye shyow-yoo, nee how","اے آئی شیاؤ یو، نی ہاؤ!"],"王老师，你好！":["wahng laow-shr, nee how","وانگ لاؤ شی، نی ہاؤ!"],"你好":["nee how","نی ہاؤ"],"王老师":["wahng laow-shr","وانگ لاؤ شی"],
+"大家好！":["dah-jyah how","دا جیا ہاؤ!"],"老师，您好！":["laow-shr, neen how","لاؤ شی، نین ہاؤ!"],"你们好！":["nee-men how","نی من ہاؤ!"],"你好，小语！":["nee how, shyow-yoo","نی ہاؤ، شیاؤ یو!"],
+"大家":["dah-jyah","دا جیا"],"好":["how","ہاؤ"],"学生":["shweh-shung","شوئے شنگ"],"们":["men","من"],"老师":["laow-shr","لاؤ شی"],"您":["neen","نین"],"你们":["nee-men","نی من"],
+"谢谢！":["shyeh-shyeh","شیے شیے!"],"不客气！":["boo kuh-chee","بو کھ چی!"],"同学们，再见！":["tong-shweh-men, dzai-jyen","تونگ شوئے من، زائی جیین!"],"老师，再见！":["laow-shr, dzai-jyen","لاؤ شی، زائی جیین!"],
+"谢谢":["shyeh-shyeh","شیے شیے"],"不客气":["boo kuh-chee","بو کھ چی"],"同学":["tong-shweh","تونگ شوئے"],"再见":["dzai-jyen","زائی جیین"],
+"妈种麻，我放马。马吃麻，妈骂马。":["mah jong mah, wuh fahng mah. mah chr mah, mah mah mah","ما جونگ ما، وو فانگ ما۔ ما چھ ما، ما ما ما۔"],
+"请问，你叫什么名字？":["ching-wun, nee jyaow shun-muh meeng-dzuh?","چنگ ون، نی جیاؤ شن مَ مِنگ زی؟"],"我叫陈天中。":["wuh jyaow chun tyen-jong","وو جیاؤ چھن تیان ژونگ۔"],
+"你好，安妮！":["nee how, ahn-nee","نی ہاؤ، آن نی!"],"你好，陈天中！我不是安妮，我是白家月。":["nee how, chun tyen-jong! wuh boo shr ahn-nee, wuh shr buy jyah-yweh","نی ہاؤ، چھن تیان ژونگ! وو بو شی آن نی، وو شی بائی جیا یوئے۔"],
+"对不起！":["dway-boo-chee","دوئے بو چی!"],"没关系！":["may gwahn-shee","مے گوان شی!"],
+"请问":["ching-wun","چنگ ون"],"你":["nee","نی"],"叫":["jyaow","جیاؤ"],"什么":["shun-muh","شن مَ"],"名字":["meeng-dzuh","مِنگ زی"],"我":["wuh","وو"],
+"不":["boo","بو"],"是":["shr","شی"],"对不起":["dway-boo-chee","دوئے بو چی"],"没关系":["may gwahn-shee","مے گوان شی"],"没事":["may shr","مے شی"],
+"我是中国人。":["wuh shr jong-gwuh run","وو شی ژونگ گوو رن۔"],"我是法国人。我的中文老师也是中国人。":["wuh shr fah-gwuh run. wuh duh jong-wun laow-shr yeh shr jong-gwuh run","وو شی فا گوو رن۔ وو دَ ژونگ ون لاؤ شی یے شی ژونگ گوو رن۔"],
+"这是谁？":["juh shr shway?","جَ شی شوے؟"],"这是我女朋友。":["juh shr wuh nyoo pung-yo","جَ شی وو نیو پنگ یو۔"],"你女朋友是哪国人？":["nee nyoo pung-yo shr nah gwuh run?","نی نیو پنگ یو شی نا گوو رن؟"],"她也是泰国人。":["tah yeh shr tai-gwuh run","تا یے شی تائی گوو رن۔"],
+"喂，一飞！":["way, ee-fay!","وے، ای فے!"],"姐姐！":["jyeh-jyeh","جیے جیے!"],"你工作还忙吗？":["nee gong-dzwuh hi mahng mah?","نی گونگ زوو ہائی مانگ ما؟"],"对，还很忙。你也很忙吗？":["dway, hi hun mahng. nee yeh hun mahng mah?","دوئے، ہائی ہن مانگ۔ نی یے ہن مانگ ما؟"],
+"我不太忙。我们很想你。":["wuh boo tai mahng. wuh-men hun shyahng nee","وو بو تائی مانگ۔ وو من ہن شیانگ نی۔"],"我也想你们。":["wuh yeh shyahng nee-men","وو یے شیانگ نی من۔"],
+"人":["run","رن"],"的":["duh","دَ"],"中国":["jong-gwuh","ژونگ گوو"],"法国":["fah-gwuh","فا گوو"],"中文":["jong-wun","ژونگ ون"],"这":["juh","جَ"],"谁":["shway","شوے"],"女朋友":["nyoo pung-yo","نیو پنگ یو"],"哪":["nah","نا"],"国":["gwuh","گوو"],"她":["tah","تا"],"泰国":["tai-gwuh","تائی گوو"],
+"喂":["way","وے"],"姐姐":["jyeh-jyeh","جیے جیے"],"工作":["gong-dzwuh","گونگ زوو"],"还":["hi","ہائی"],"忙":["mahng","مانگ"],"吗":["mah","ما"],"对":["dway","دوئے"],"太":["tai","تائی"],"我们":["wuh-men","وو من"],"想":["shyahng","شیانگ"],
+"一飞忙吗？":["ee-fay mahng mah?","ای فے مانگ ما؟"],"她很忙。":["tah hun mahng","تا ہن مانگ۔"],"她有多少个学生？":["tah yo dwuh-shaow guh shweh-shung?","تا یو دوو شاؤ گَ شوئے شنگ؟"],"她有二十个学生。":["tah yo are-shr guh shweh-shung","تا یو آر شی گَ شوئے شنگ۔"],
+"有":["yo","یو"],"多少":["dwuh-shaow","دوو شاؤ"],"个":["guh","گَ"],
+"我有两个哥哥，你呢？":["wuh yo lyahng guh guh-guh, nee nuh?","وو یو لیانگ گَ گَ گَ، نی نَ؟"],"我没有哥哥。":["wuh may-yo guh-guh","وو مے یو گَ گَ۔"],"你家有几口人？":["nee jyah yo jee ko run?","نی جیا یو جی کو رن؟"],"我家有四口人，爸爸、妈妈、妹妹和我。":["wuh jyah yo suh ko run: bah-bah, mah-mah, may-may huh wuh","وو جیا یو سِ کو رن: با با، ما ما، مے مے ہَ وو۔"],
+"哥哥":["guh-guh","گَ گَ"],"呢":["nuh","نَ"],"没有":["may-yo","مے یو"],"家":["jyah","جیا"],"几":["jee","جی"],"口":["ko","کو"],"爸爸":["bah-bah","با با"],"妈妈":["mah-mah","ما ما"],"妹妹":["may-may","مے مے"],"和":["huh","ہَ"],
+"这是您儿子吗？":["juh shr neen are-dzuh mah?","جَ شی نین آر زَ ما؟"],"是的。我有两个孩子，一个儿子，一个女儿。":["shr duh. wuh yo lyahng guh hi-dzuh, ee guh are-dzuh, ee guh nyoo-are","شی دَ۔ وو یو لیانگ گَ ہائی زَ، ای گَ آر زَ، ای گَ نیو آر۔"],"您儿子几岁？":["neen are-dzuh jee sway?","نین آر زَ جی سوئے؟"],"他今年五岁。":["tah jeen-nyen woo sway","تا جین نیان وو سوئے۔"],"您女儿多大？":["neen nyoo-are dwuh dah?","نین نیو آر دوو دا؟"],"她今年十二。":["tah jeen-nyen shr-are","تا جین نیان شی آر۔"],
+"儿子":["are-dzuh","آر زَ"],"孩子":["hi-dzuh","ہائی زَ"],"女儿":["nyoo-are","نیو آر"],"岁":["sway","سوئے"],"他":["tah","تا"],"今年":["jeen-nyen","جین نیان"],"多":["dwuh","دوو"],"大":["dah","دا"],
+"今天几号？":["jeen-tyen jee how?","جین تیان جی ہاؤ؟"],"今天9月8号。":["jeen-tyen jyo yweh bah how","جین تیان جیو یوئے با ہاؤ۔"],"星期几？":["shing-chee jee?","شنگ چی جی؟"],"星期日。今天我休息。":["shing-chee-rr. jeen-tyen wuh shyo-shee","شنگ چی ر۔ جین تیان وو شیو شی۔"],
+"今天":["jeen-tyen","جین تیان"],"号":["how","ہاؤ"],"月":["yweh","یوئے"],"日":["rr","ر"],"星期":["shing-chee","شنگ چی"],"星期日":["shing-chee-rr","شنگ چی ر"],"星期天":["shing-chee-tyen","شنگ چی تیان"],"休息":["shyo-shee","شیو شی"],
+"你会做饭吗？":["nee hway dzwuh fahn mah?","نی ہوئے زوو فان ما؟"],"我会做。":["wuh hway dzwuh","وو ہوئے زوو۔"],"你会做什么？":["nee hway dzwuh shun-muh?","نی ہوئے زوو شن مَ؟"],"我会做面条儿、饺子，也会做一些菜。星期天我也做饭。":["wuh hway dzwuh myen-tyaor, jyaow-dzuh, yeh hway dzwuh ee-shyeh tsai. shing-chee-tyen wuh yeh dzwuh fahn","وو ہوئے زوو میان تیاؤر، جیاؤ زَ، یے ہوئے زوو ای شیے تسائی۔ شنگ چی تیان وو یے زوو فان۔"],
+"会":["hway","ہوئے"],"做饭":["dzwuh fahn","زوو فان"],"做":["dzwuh","زوو"],"面条儿":["myen-tyaor","میان تیاؤر"],"饺子":["jyaow-dzuh","جیاؤ زَ"],"一些":["ee-shyeh","ای شیے"],"菜":["tsai","تسائی"],
+"同乐，下班吗？":["tong-luh, shyah-bahn mah?","تونگ لَ، شیا بان ما؟"],"下班。":["shyah-bahn","شیا بان۔"],"这是你的新电脑吗？":["juh shr nee duh sheen dyen-now mah?","جَ شی نی دَ شین دیان ناؤ ما؟"],"是的，是我的新电脑。":["shr duh, shr wuh duh sheen dyen-now","شی دَ، شی وو دَ شین دیان ناؤ۔"],"真好看！":["jun how-kahn","جن ہاؤ کان!"],"我也很喜欢它。":["wuh yeh hun shee-hwahn tah","وو یے ہن شی ہوان تا۔"],
+"下班":["shyah-bahn","شیا بان"],"新":["sheen","شین"],"电脑":["dyen-now","دیان ناؤ"],"真":["jun","جن"],"好看":["how-kahn","ہاؤ کان"],"喜欢":["shee-hwahn","شی ہوان"],"它":["tah","تا"],
+"家月，你的手机号是多少？":["jyah-yweh, nee duh show-jee how shr dwuh-shaow?","جیا یوئے، نی دَ شو جی ہاؤ شی دوو شاؤ؟"],"我的手机号是+33 601493190。":["wuh duh show-jee how shr sahn sahn, lyo ling yaow suh jyo sahn yaow jyo ling","وو دَ شو جی ہاؤ شی سان سان، لیو لنگ یاؤ سی جیو سان یاؤ جیو لنگ۔"],"我的手机号是+86 13552721160。":["wuh duh show-jee how shr bah lyo, yaow sahn woo woo are chee are yaow yaow lyo ling","وو دَ شو جی ہاؤ شی با لیو، یاؤ سان وو وو آر چی آر یاؤ یاؤ لیو لنگ۔"],"好的。":["how duh","ہاؤ دَ۔"],
+"手机":["show-jee","شو جی"],"电话":["dyen-hwah","دیان ہوا"],
+"家月，明天你去哪儿？":["jyah-yweh, ming-tyen nee chyoo nar?","جیا یوئے، منگ تیان نی چیو نار؟"],"我想去超市买东西。":["wuh shyahng chyoo chaow-shr my dong-shee","وو شیانگ چیو چاؤ شی مائی دونگ شی۔"],"你去超市买什么？":["nee chyoo chaow-shr my shun-muh?","نی چیو چاؤ شی مائی شن مَ؟"],"我想买些牛奶。":["wuh shyahng my shyeh nyo-nai","وو شیانگ مائی شیے نیو نائی۔"],
+"明天":["ming-tyen","منگ تیان"],"去":["chyoo","چیو"],"哪儿":["nar","نار"],"超市":["chaow-shr","چاؤ شی"],"买":["my","مائی"],"东西":["dong-shee","دونگ شی"],"些":["shyeh","شیے"],"牛奶":["nyo-nai","نیو نائی"],
+"星期天我们去哪儿吃晚饭？":["shing-chee-tyen wuh-men chyoo nar chr wahn-fahn?","شنگ چی تیان وو من چیو نار چھ وان فان؟"],"我还想去西安饭店。":["wuh hi shyahng chyoo shee-ahn fahn-dyen","وو ہائی شیانگ چیو شی آن فان دیان۔"],"那边的包子非常好吃，我想吃包子。":["nah-byen duh bow-dzuh fay-chahng how-chr, wuh shyahng chr bow-dzuh","نا بیان دَ باؤ زَ فے چانگ ہاؤ چھ، وو شیانگ چھ باؤ زَ۔"],"妈妈，我想吃米饭，不想吃包子。":["mah-mah, wuh shyahng chr mee-fahn, boo shyahng chr bow-dzuh","ما ما، وو شیانگ چھ می فان، بو شیانگ چھ باؤ زَ۔"],"好的。我们怎么去？":["how duh. wuh-men dzun-muh chyoo?","ہاؤ دَ۔ وو من زن مَ چیو؟"],"坐出租车去。":["dzwuh choo-dzoo-chuh chyoo","زوو چو زو چھَ چیو۔"],
+"吃":["chr","چھ"],"晚饭":["wahn-fahn","وان فان"],"那边":["nah-byen","نا بیان"],"包子":["bow-dzuh","باؤ زَ"],"非常":["fay-chahng","فے چانگ"],"好吃":["how-chr","ہاؤ چھ"],"米饭":["mee-fahn","می فان"],"怎么":["dzun-muh","زن مَ"],"坐":["dzwuh","زوو"],"出租车":["choo-dzoo-chuh","چو زو چھَ"],"西安饭店":["shee-ahn fahn-dyen","شی آن فان دیان"],
+"现在几点？":["shyen-dzai jee dyen?","شیان زائی جی دیان؟"],"早上八点四十。":["dzaow-shahng bah dyen suh-shr","زاؤ شانگ با دیان سی شی۔"],"我上午十点十分有课。":["wuh shahng-woo shr dyen shr fun yo kuh","وو شانگ وو شی دیان شی فن یو کَ۔"],"好的，我们下午两点见吧。":["how duh, wuh-men shyah-woo lyahng dyen jyen bah","ہاؤ دَ، وو من شیا وو لیانگ دیان جیان با۔"],
+"现在":["shyen-dzai","شیان زائی"],"点":["dyen","دیان"],"早上":["dzaow-shahng","زاؤ شانگ"],"上午":["shahng-woo","شانگ وو"],"分":["fun","فن"],"课":["kuh","کَ"],"下午":["shyah-woo","شیا وو"],"见":["jyen","جیان"],"吧":["bah","با"],
+"下午我想去电影院看电影，你去吗？":["shyah-woo wuh shyahng chyoo dyen-ying-ywen kahn dyen-ying, nee chyoo mah?","شیا وو وو شیانگ چیو دیان ینگ یوان کان دیان ینگ، نی چیو ما؟"],"我不想去，下午还有事。":["wuh boo shyahng chyoo, shyah-woo hi yo shr","وو بو شیانگ چیو، شیا وو ہائی یو شی۔"],"好的。明天呢？":["how duh. ming-tyen nuh?","ہاؤ دَ۔ منگ تیان نَ؟"],"我明天下午两点还上课呢，四点半下课。":["wuh ming-tyen shyah-woo lyahng dyen hi shahng-kuh nuh, suh dyen bahn shyah-kuh","وو منگ تیان شیا وو لیانگ دیان ہائی شانگ کَ نَ، سی دیان بان شیا کَ۔"],
+"电影院":["dyen-ying-ywen","دیان ینگ یوان"],"看":["kahn","کان"],"电影":["dyen-ying","دیان ینگ"],"事":["shr","شی"],"上课":["shahng-kuh","شانگ کَ"],"半":["bahn","بان"],"下课":["shyah-kuh","شیا کَ"],
+"喂，你在哪儿呢？":["way, nee dzai nar nuh?","وے، نی زائی نار نَ؟"],"我在家里呢。":["wuh dzai jyah-lee nuh","وو زائی جیا لی نَ۔"],"我晚上六点半下班。":["wuh wahn-shahng lyo dyen bahn shyah-bahn","وو وان شانگ لیو دیان بان شیا بان۔"],"我八点去医院上班。":["wuh bah dyen chyoo ee-ywen shahng-bahn","وو با دیان چیو ای یوان شانگ بان۔"],"好的，你去店里买些菜吧。":["how duh, nee chyoo dyen-lee my shyeh tsai bah","ہاؤ دَ، نی چیو دیان لی مائی شیے تسائی با۔"],"好，我十分钟后去。":["how, wuh shr fun-jong ho chyoo","ہاؤ، وو شی فن ژونگ ہو چیو۔"],
+"在":["dzai","زائی"],"里":["lee","لی"],"晚上":["wahn-shahng","وان شانگ"],"医院":["ee-ywen","ای یوان"],"上班":["shahng-bahn","شانگ بان"],"店":["dyen","دیان"],"分钟":["fun-jong","فن ژونگ"],"后":["ho","ہو"],
+"房间外有一只小猫。":["fahng-jyen wai yo ee jr shyaow maow","فانگ جیان وائی یو ای ژی شیاؤ ماؤ۔"],"我没看见，它在哪儿呢？":["wuh may kahn-jyen, tah dzai nar nuh?","وو مے کان جیان، تا زائی نار نَ؟"],"它在桌子下呢。":["tah dzai jwuh-dzuh shyah nuh","تا زائی ژوو زَ شیا نَ۔"],"这只小猫真漂亮！":["juh jr shyaow maow jun pyaow-lyahng","جَ ژی شیاؤ ماؤ جن پیاؤ لیانگ!"],
+"房间":["fahng-jyen","فانگ جیان"],"外":["wai","وائی"],"只":["jr","ژی"],"小":["shyaow","شیاؤ"],"猫":["maow","ماؤ"],"没":["may","مے"],"看见":["kahn-jyen","کان جیان"],"桌子":["jwuh-dzuh","ژوو زَ"],"下":["shyah","شیا"],"漂亮":["pyaow-lyahng","پیاؤ لیانگ"],
+"我们在哪儿见呢？":["wuh-men dzai nar jyen nuh?","وو من زائی نار جیان نَ؟"],"在学校书店前见吧。":["dzai shweh-shyaow shoo-dyen chyen jyen bah","زائی شوئے شیاؤ شو دیان چیان جیان با۔"],"好的。下午两点你能到吗？":["how duh. shyah-woo lyahng dyen nee nung daow mah?","ہاؤ دَ۔ شیا وو لیانگ دیان نی نَنگ داؤ ما؟"],"我能到。我在学校吃午饭。":["wuh nung daow. wuh dzai shweh-shyaow chr woo-fahn","وو نَنگ داؤ۔ وو زائی شوئے شیاؤ چھ وو فان۔"],
+"学校":["shweh-shyaow","شوئے شیاؤ"],"书店":["shoo-dyen","شو دیان"],"前":["chyen","چیان"],"能":["nung","نَنگ"],"到":["daow","داؤ"],"午饭":["woo-fahn","وو فان"],
+"小胡，还没吃饭呢？":["shyaow hoo, hi may chr fahn nuh?","شیاؤ ہو، ہائی مے چھ فان نَ؟"],"没吃呢。":["may chr nuh","مے چھ نَ۔"],"大医院病人多，医生非常忙。":["dah ee-ywen bing-run dwuh, ee-shung fay-chahng mahng","دا ای یوان بنگ رن دوو، ای شنگ فے چانگ مانگ۔"],"是的。我爸爸也在医院工作，他也非常忙。":["shr duh. wuh bah-bah yeh dzai ee-ywen gong-dzwuh, tah yeh fay-chahng mahng","شی دَ۔ وو با با یے زائی ای یوان گونگ زوو، تا یے فے چانگ مانگ۔"],"你家有两个医生？":["nee jyah yo lyahng guh ee-shung?","نی جیا یو لیانگ گَ ای شنگ؟"],"对。":["dway","دوئے۔"],
+"饭":["fahn","فان"],"病人":["bing-run","بنگ رن"],"医生":["ee-shung","ای شنگ"],"胡医生":["hoo ee-shung","ہو ای شنگ"],"学校前边有一家电影院。":["shweh-shyaow chyen-byen yo ee jyah dyen-ying-ywen", "شوئے شیاؤ چیان بیان یو ای جیا دیان ینگ یوان۔"],"对。我们晚上去那个电影院看电影吧。":["dway. wuh-men wahn-shahng chyoo nay-guh dyen-ying-ywen kahn dyen-ying bah", "دوئے۔ وو من وان شانگ چیو نے گَ دیان ینگ یوان کان دیان ینگ با۔"],"好！我们七点在电影院外边见，好吗？":["how! wuh-men chee dyen dzai dyen-ying-ywen wai-byen jyen, how mah?", "ہاؤ! وو من چی دیان زائی دیان ینگ یوان وائی بیان جیان، ہاؤ ما؟"],"好的，晚上七点见！":["how duh, wahn-shahng chee dyen jyen", "ہاؤ دَ، وان شانگ چی دیان جیان!"],"前边":["chyen-byen", "چیان بیان"],"边":["byen", "بیان"],"那个":["nay-guh", "نے گَ"],"外边":["wai-byen", "وائی بیان"],"椅子上有一本中文书，那是谁的书？":["ee-dzuh shahng yo ee bun jong-wun shoo, nah shr shway duh shoo?", "ای زَ شانگ یو ای بن ژونگ ون شو، نا شی شوے دَ شو؟"],"是我的书，谢谢。这是我的第二本中文书。":["shr wuh duh shoo, shyeh-shyeh. juh shr wuh duh dee-are bun jong-wun shoo", "شی وو دَ شو، شیے شیے۔ جَ شی وو دَ دی آر بن ژونگ ون شو۔"],"不客气。你明天上午在哪儿？":["boo kuh-chee. nee ming-tyen shahng-woo dzai nar?", "بو کھ چی۔ نی منگ تیان شانگ وو زائی نار؟"],"我明天上午在学校学习。":["wuh ming-tyen shahng-woo dzai shweh-shyaow shweh-shee", "وو منگ تیان شانگ وو زائی شوئے شیاؤ شوئے شی۔"],"椅子":["ee-dzuh", "ای زَ"],"上":["shahng", "شانگ"],"本":["bun", "بن"],"书":["shoo", "شو"],"那":["nah", "نا"],"第":["dee", "دی"],"学习":["shweh-shee", "شوئے شی"],"明天星期六，你做什么？":["ming-tyen shing-chee-lyo, nee dzwuh shun-muh?", "منگ تیان شنگ چی لیو، نی زوو شن مَ؟"],"我白天在家里读书，晚上和朋友们去外边唱歌。":["wuh bye-tyen dzai jyah-lee doo-shoo, wahn-shahng huh pung-yo-men chyoo wai-byen chahng-guh", "وو بائی تیان زائی جیا لی دو شو، وان شانگ ہَ پنگ یو من چیو وائی بیان چانگ گَ۔"],"你唱歌很好听。":["nee chahng-guh hun how-ting", "نی چانگ گَ ہن ہاؤ تنگ۔"],"谢谢！您星期六做什么？":["shyeh-shyeh! neen shing-chee-lyo dzwuh shun-muh?", "شیے شیے! نین شنگ چی لیو زوو شن مَ؟"],"我在家里做饭、看电视，和孩子们、小狗玩。":["wuh dzai jyah-lee dzwuh fahn, kahn dyen-shr, huh hi-dzuh-men, shyaow go wahn", "وو زائی جیا لی زوو فان، کان دیان شی، ہَ ہائی زَ من، شیاؤ گو وان۔"],"我也有一只小狗。":["wuh yeh yo ee jr shyaow go", "وو یے یو ای ژی شیاؤ گو۔"],"白天":["bye-tyen", "بائی تیان"],"读书":["doo-shoo", "دو شو"],"朋友":["pung-yo", "پنگ یو"],"唱":["chahng", "چانگ"],"歌":["guh", "گَ"],"好听":["how-ting", "ہاؤ تنگ"],"电视":["dyen-shr", "دیان شی"],"狗":["go", "گو"],"玩":["wahn", "وان"],"请问，有杯子吗？":["ching-wun, yo bay-dzuh mah?", "چنگ ون، یو بے زَ ما؟"],"有，杯子在这边。":["yo, bay-dzuh dzai juh-byen", "یو، بے زَ زائی جَ بیان۔"],"多少钱一个？":["dwuh-shaow chyen ee guh?", "دوو شاؤ چیان ای گَ؟"],"这些五块钱一个，那些十块钱一个。":["juh-shyeh woo kwai chyen ee guh, nah-shyeh shr kwai chyen ee guh", "جَ شیے وو کوائی چیان ای گَ، نا شیے شی کوائی چیان ای گَ۔"],"我买这个吧。":["wuh my juh-guh bah", "وو مائی جَ گَ با۔"],"杯子":["bay-dzuh", "بے زَ"],"售货员":["show-hwuh-ywen", "شو ہوو یوان"],"这边":["juh-byen", "جَ بیان"],"钱":["chyen", "چیان"],"这些":["juh-shyeh", "جَ شیے"],"块":["kwai", "کوائی"],"那些":["nah-shyeh", "نا شیے"],"这儿的水果真不少！":["jar duh shway-gwuh jun boo shaow!", "جَر دَ شوے گوو جن بو شاؤ!"],"您想买什么？":["neen shyahng my shun-muh?", "نین شیانگ مائی شن مَ؟"],"我想买两斤苹果。":["wuh shyahng my lyahng jeen ping-gwuh", "وو شیانگ مائی لیانگ جین پنگ گوو۔"],"苹果三块五一斤。这些七块二，七块钱吧。":["ping-gwuh sahn kwai woo ee jeen. juh-shyeh chee kwai are, chee kwai chyen bah", "پنگ گوو سان کوائی وو ای جین۔ جَ شیے چی کوائی آر، چی کوائی چیان با۔"],"好的，这儿的苹果真便宜！":["how duh, jar duh ping-gwuh jun pyen-yee!", "ہاؤ دَ، جَر دَ پنگ گوو جن پیان ای!"],"这儿":["jar", "جَر"],"水果":["shway-gwuh", "شوے گوو"],"少":["shaow", "شاؤ"],"斤":["jeen", "جین"],"苹果":["ping-gwuh", "پنگ گوو"],"便宜":["pyen-yee", "پیان ای"],"这家商店衣服真多！这件一百元，怎么样？":["juh jyah shahng-dyen ee-foo jun dwuh! juh jyen ee bye ywen, dzun-muh-yahng?", "جَ جیا شانگ دیان ای فو جن دوو! جَ جیان ای بائی یوان، زن مَ یانگ؟"],"好看，也不贵。":["how-kahn, yeh boo gway", "ہاؤ کان، یے بو گوے۔"],"小雪能穿，买一件吧。":["shyaow-shweh nung chwahn, my ee jyen bah", "شیاؤ شوئے نَنگ چوان، مائی ای جیان با۔"],"好的。小明能穿吗？":["how duh. shyaow-ming nung chwahn mah?", "ہاؤ دَ۔ شیاؤ منگ نَنگ چوان ما؟"],"不能。这些是女孩子穿的衣服，男孩子的衣服在那儿。":["boo nung. juh-shyeh shr nyoo hi-dzuh chwahn duh ee-foo, nahn hi-dzuh duh ee-foo dzai nar", "بو نَنگ۔ جَ شیے شی نیو ہائی زَ چوان دَ ای فو، نان ہائی زَ دَ ای فو زائی نار۔"],"商店":["shahng-dyen", "شانگ دیان"],"衣服":["ee-foo", "ای فو"],"件":["jyen", "جیان"],"元":["ywen", "یوان"],"怎么样":["dzun-muh-yahng", "زن مَ یانگ"],"贵":["gway", "گوے"],"穿":["chwahn", "چوان"],"女":["nyoo", "نیو"],"男":["nahn", "نان"],"那儿":["nar", "نار"],"喂，李文，你什么时候能到饭店？":["way, lee wun, nee shun-muh shr-ho nung daow fahn-dyen?", "وے، لی ون، نی شن مَ شی ہو نَنگ داؤ فان دیان؟"],"还不知道，正在找呢。它是不是在超市后边？":["hi boo jr-daow, jung-dzai jaow nuh. tah shr boo shr dzai chaow-shr ho-byen?", "ہائی بو ژی داؤ، جنگ زائی جاؤ نَ۔ تا شی بو شی زائی چاؤ شی ہو بیان؟"],"是的。你开车没开车？":["shr duh. nee kigh-chuh may kigh-chuh?", "شی دَ۔ نی کائی چھَ مے کائی چھَ؟"],"我没开车，坐车呢。":["wuh may kigh-chuh, dzwuh chuh nuh", "وو مے کائی چھَ، زوو چھَ نَ۔"],"时候":["shr-ho", "شی ہو"],"饭店":["fahn-dyen", "فان دیان"],"知道":["jr-daow", "ژی داؤ"],"正在":["jung-dzai", "جنگ زائی"],"找":["jaow", "جاؤ"],"开车":["kigh-chuh", "کائی چھَ"],"车":["chuh", "چھَ"],"你还在读大学吗？":["nee hi dzai doo dah-shweh mah?", "نی ہائی زائی دو دا شوئے ما؟"],"对，我读大学呢，还是大学生。":["dway, wuh doo dah-shweh nuh, hi shr dah-shweh-shung", "دوئے، وو دو دا شوئے نَ، ہائی شی دا شوئے شنگ۔"],"你们学习忙不忙？":["nee-men shweh-shee mahng boo mahng?", "نی من شوئے شی مانگ بو مانگ؟"],"非常忙，我学医，我们的课很多。":["fay-chahng mahng, wuh shweh ee, wuh-men duh kuh hun dwuh", "فے چانگ مانگ، وو شوئے ای، وو من دَ کَ ہن دوو۔"],"读":["doo", "دو"],"大学":["dah-shweh", "دا شوئے"],"大学生":["dah-shweh-shung", "دا شوئے شنگ"],"学":["shweh", "شوئے"],"医":["ee", "ای"],"弟弟起床没起床呢？":["dee-dee chee-chwahng may chee-chwahng nuh?", "دی دی چی چوانگ مے چی چوانگ نَ؟"],"没起床呢，还在睡觉。":["may chee-chwahng nuh, hi dzai shway-jyaow", "مے چی چوانگ نَ، ہائی زائی شوے جیاؤ۔"],"还睡呢？他今天去不去那里？":["hi shway nuh? tah jeen-tyen chyoo boo chyoo nah-lee?", "ہائی شوے نَ؟ تا جین تیان چیو بو چیو نا لی؟"],"去哪里？":["chyoo nah-lee?", "چیو نا لی؟"],"去超市。":["chyoo chaow-shr", "چیو چاؤ شی۔"],"我昨天问他，他对我说，他不去，他今天要和小朋友玩。":["wuh dzwuh-tyen wun tah, tah dway wuh shwuh, tah boo chyoo, tah jeen-tyen yaow huh shyaow-pung-yo wahn", "وو زوو تیان ون تا، تا دوئے وو شوو، تا بو چیو، تا جین تیان یاؤ ہَ شیاؤ پنگ یو وان۔"],"弟弟":["dee-dee", "دی دی"],"起床":["chee-chwahng", "چی چوانگ"],"睡觉":["shway-jyaow", "شوے جیاؤ"],"睡":["shway", "شوے"],"那里":["nah-lee", "نا لی"],"哪里":["nah-lee", "نا لی"],"昨天":["dzwuh-tyen", "زوو تیان"],"问":["wun", "ون"],"说":["shwuh", "شوو"],"要":["yaow", "یاؤ"],"小朋友":["shyaow-pung-yo", "شیاؤ پنگ یو"],"今天天气怎么样？":["jeen-tyen tyen-chee dzun-muh-yahng?", "جین تیان تیان چی زن مَ یانگ؟"],"这里的天不太好，下雨了。":["juh-lee duh tyen boo tai how, shyah yoo luh", "جَ لی دَ تیان بو تائی ہاؤ، شیا یو لَ۔"],"雨大吗？":["yoo dah mah?", "یو دا ما؟"],"有点儿大，我觉得很冷。":["yo-dyar dah, wuh jweh-duh hun lung", "یو دیار دا، وو جوئے دَ ہن لَنگ۔"],"天气":["tyen-chee", "تیان چی"],"这里":["juh-lee", "جَ لی"],"天":["tyen", "تیان"],"下雨":["shyah yoo", "شیا یو"],"了":["luh", "لَ"],"雨":["yoo", "یو"],"有点儿":["yo-dyar", "یو دیار"],"觉得":["jweh-duh", "جوئے دَ"],"冷":["lung", "لَنگ"],"昨天下雪了。":["dzwuh-tyen shyah shweh luh", "زوو تیان شیا شوئے لَ۔"],"是的，太冷了。":["shr duh, tai lung luh", "شی دَ، تائی لَنگ لَ۔"],"你昨天没来公司，生病了？":["nee dzwuh-tyen may lai gong-suh, shung-bing luh?", "نی زوو تیان مے لائی گونگ سِ، شنگ بنگ لَ؟"],"对，我昨天去医院看病了。":["dway, wuh dzwuh-tyen chyoo ee-ywen kahn-bing luh", "دوئے، وو زوو تیان چیو ای یوان کان بنگ لَ۔"],"雪":["shweh", "شوئے"],"来":["lai", "لائی"],"公司":["gong-suh", "گونگ سِ"],"生病":["shung-bing", "شنگ بنگ"],"看病":["kahn-bing", "کان بنگ"],"医生，我病了。":["ee-shung, wuh bing luh", "ای شنگ، وو بنگ لَ۔"],"我看看。你觉得怎么样？":["wuh kahn-kahn. nee jweh-duh dzun-muh-yahng?", "وو کان کان۔ نی جوئے دَ زن مَ یانگ؟"],"我很冷。":["wuh hun lung", "وو ہن لَنگ۔"],"好的，吃一点儿药，今天休息半天吧。":["how duh, chr ee-dyar yaow, jeen-tyen shyo-shee bahn tyen bah", "ہاؤ دَ، چھ ای دیار یاؤ، جین تیان شیو شی بان تیان با۔"],"回家后再喝些热水。":["hway jyah ho dzai huh shyeh ruh shway", "ہوئے جیا ہو زائی ہَ شیے رَ شوے۔"],"病":["bing", "بنگ"],"一点儿":["ee-dyar", "ای دیار"],"药":["yaow", "یاؤ"],"回":["hway", "ہوئے"],"再":["dzai", "زائی"],"喝":["huh", "ہَ"],"热":["ruh", "رَ"],"水":["shway", "شوے"],"王老师，我可以再问您一个问题吗？":["wahng laow-shr, wuh kuh-yee dzai wun neen ee guh wun-tee mah?", "وانگ لاؤ شی، وو کَ ای زائی ون نین ای گَ ون تی ما؟"],"可以。你有什么问题？":["kuh-yee. nee yo shun-muh wun-tee?", "کَ ای۔ نی یو شن مَ ون تی؟"],"那个小店卖不卖手机？":["nay-guh shyaow dyen my boo my show-jee?", "نے گَ شیاؤ دیان مائی بو مائی شو جی؟"],"我不知道。你可以打电话问一下。":["wuh boo jr-daow. nee kuh-yee dah dyen-hwah wun ee-shyah", "وو بو ژی داؤ۔ نی کَ ای دا دیان ہوا ون ای شیا۔"],"可以":["kuh-yee", "کَ ای"],"问题":["wun-tee", "ون تی"],"卖":["my", "مائی"],"打电话":["dah dyen-hwah", "دا دیان ہوا"],"一下":["ee-shyah", "ای شیا"],"女士，请坐！您喝什么？":["nyoo-shr, ching dzwuh! neen huh shun-muh?", "نیو شی، چنگ زوو! نین ہَ شن مَ؟"],"我看一下。请给我一杯牛奶。":["wuh kahn ee-shyah. ching gay wuh ee bay nyo-nai", "وو کان ای شیا۔ چنگ گے وو ای بے نیو نائی۔"],"好的。您还要什么？":["how duh. neen hi yaow shun-muh?", "ہاؤ دَ۔ نین ہائی یاؤ شن مَ؟"],"我还没吃早饭，再要这个面包和鸡蛋吧。":["wuh hi may chr dzaow-fahn, dzai yaow juh-guh myen-bow huh jee-dahn bah", "وو ہائی مے چھ زاؤ فان، زائی یاؤ جَ گَ میان باؤ ہَ جی دان با۔"],"服务员":["foo-woo-ywen", "فو وو یوان"],"女士":["nyoo-shr", "نیو شی"],"请":["ching", "چنگ"],"给":["gay", "گے"],"杯":["bay", "بے"],"早饭":["dzaow-fahn", "زاؤ فان"],"这个":["juh-guh", "جَ گَ"],"面包":["myen-bow", "میان باؤ"],"鸡蛋":["jee-dahn", "جی دان"],"先生，请坐！您要什么？":["shyen-shung, ching dzwuh! neen yaow shun-muh?", "شیان شنگ، چنگ زوو! نین یاؤ شن مَ؟"],"我要一斤饺子。":["wuh yaow ee jeen jyaow-dzuh", "وو یاؤ ای جین جیاؤ زَ۔"],"好的。一斤饺子四十个。":["how duh. ee jeen jyaow-dzuh suh-shr guh", "ہاؤ دَ۔ ای جین جیاؤ زَ سی شی گَ۔"],"四十个太多了，我要一半吧。":["suh-shr guh tai dwuh luh, wuh yaow ee-bahn bah", "سی شی گَ تائی دوو لَ، وو یاؤ ای بان با۔"],"半斤二十个。您想喝什么？":["bahn jeen are-shr guh. neen shyahng huh shun-muh?", "بان جین آر شی گَ۔ نین شیانگ ہَ شن مَ؟"],"请给我一杯茶吧。":["ching gay wuh ee bay chah bah", "چنگ گے وو ای بے چھا با۔"],"先生":["shyen-shung", "شیان شنگ"],"一半":["ee-bahn", "ای بان"],"茶":["chah", "چھا"],"你们上火车后看见王老师了吗？":["nee-men shahng hwuh-chuh ho kahn-jyen wahng laow-shr luh mah?", "نی من شانگ ہوو چھَ ہو کان جیان وانگ لاؤ شی لَ ما؟"],"没看见。中午车开后，有些人在看书，有些人睡觉了。":["may kahn-jyen. jong-woo chuh kigh ho, yo-shyeh run dzai kahn shoo, yo-shyeh run shway-jyaow luh", "مے کان جیان۔ ژونگ وو چھَ کائی ہو، یو شیے رن زائی کان شو، یو شیے رن شوے جیاؤ لَ۔"],"你呢？":["nee nuh?", "نی نَ؟"],"我看了一个电影。":["wuh kahn-luh ee guh dyen-ying", "وو کان لَ ای گَ دیان ینگ۔"],"火车":["hwuh-chuh", "ہوو چھَ"],"中午":["jong-woo", "ژونگ وو"],"开":["kigh", "کائی"],"有些":["yo-shyeh", "یو شیے"],"有的":["yo-duh", "یو دَ"],"你们会说汉语了，也会写汉字了吗？":["nee-men hway shwuh hahn-yoo luh, yeh hway shyeh hahn-dzuh luh mah?", "نی من ہوئے شوو ہان یو لَ، یے ہوئے شیے ہان زَ لَ ما؟"],"我们都会写了。":["wuh-men doh hway shyeh luh", "وو من دو ہوئے شیے لَ۔"],"老师，我听不见。":["laow-shr, wuh ting boo jyen", "لاؤ شی، وو تنگ بو جیان۔"],"请大家不要说话！请听老师的问题：你们都会写哪些汉字了？":["ching dah-jyah boo-yaow shwuh-hwah! ching ting laow-shr duh wun-tee: nee-men doh hway shyeh nah-shyeh hahn-dzuh luh?", "چنگ دا جیا بو یاؤ شوو ہوا! چنگ تنگ لاؤ شی دَ ون تی: نی من دو ہوئے شیے نا شیے ہان زَ لَ؟"],"我会写这些字了，您看！":["wuh hway shyeh juh-shyeh dzuh luh, neen kahn!", "وو ہوئے شیے جَ شیے زَ لَ، نین کان!"],"写":["shyeh", "شیے"],"都":["doh", "دو"],"听见":["ting-jyen", "تنگ جیان"],"不要":["boo-yaow", "بو یاؤ"],"说话":["shwuh-hwah", "شوو ہوا"],"听":["ting", "تنگ"],"哪些":["nah-shyeh", "نا شیے"],"字":["dzuh", "زَ"],"汉语":["hahn-yoo", "ہان یو"],"汉字":["hahn-dzuh", "ہان زَ"],"明年女儿上中学。":["ming-nyen nyoo-are shahng jong-shweh", "منگ نیان نیو آر شانگ ژونگ شوئے۔"],"对。儿子也上小学了。":["dway. are-dzuh yeh shahng shyaow-shweh luh", "دوئے۔ آر زَ یے شانگ شیاؤ شوئے لَ۔"],"我们家有了一个中学生。":["wuh-men jyah yo-luh ee guh jong-shweh-shung", "وو من جیا یو لَ ای گَ ژونگ شوئے شنگ۔"],"还有了一个小学生。":["hi yo-luh ee guh shyaow-shweh-shung", "ہائی یو لَ ای گَ شیاؤ شوئے شنگ۔"],"上学后，他们都忙了。":["shahng-shweh ho, tah-men doh mahng luh", "شانگ شوئے ہو، تا من دو مانگ لَ۔"],"是的。太晚了，睡觉吧。":["shr duh. tai wahn luh, shway-jyaow bah", "شی دَ۔ تائی وان لَ، شوے جیاؤ با۔"],"明年":["ming-nyen", "منگ نیان"],"中学":["jong-shweh", "ژونگ شوئے"],"小学":["shyaow-shweh", "شیاؤ شوئے"],"中学生":["jong-shweh-shung", "ژونگ شوئے شنگ"],"小学生":["shyaow-shweh-shung", "شیاؤ شوئے شنگ"],"上学":["shahng-shweh", "شانگ شوئے"],"他们":["tah-men", "تا من"],"她们":["tah-men", "تا من"],"它们":["tah-men", "تا من"],"晚":["wahn", "وان"],"王老师，下个星期六我回法国。":["wahng laow-shr, shyah guh shing-chee-lyo wuh hway fah-gwuh","وانگ لاؤ شی، شیا گَ شنگ چی لیو وو ہوئے فا گوو۔"],"你坐飞机回去吗？":["nee dzwuh fay-jee hway-chyoo mah?","نی زوو فے جی ہوئے چیو ما؟"],"对，坐飞机。":["dway, dzwuh fay-jee","دوئے، زوو فے جی۔"],"飞机几点走？":["fay-jee jee dyen dzoh?","فے جی جی دیان زو؟"],"下午三点。":["shyah-woo sahn dyen","شیا وو سان دیان۔"],"好。你下午一点到机场吧。":["how. nee shyah-woo ee dyen daow jee-chahng bah","ہاؤ۔ نی شیا وو ای دیان داؤ جی چانگ با۔"],"下个":["shyah guh","شیا گَ"],"星期六":["shing-chee-lyo","شنگ چی لیو"],"回去":["hway-chyoo","ہوئے چیو"],"飞机":["fay-jee","فے جی"],"走":["dzoh","زو"],"机场":["jee-chahng","جی چانگ"],"家月，这是大兴机场。这儿真大！":["jyah-yweh, juh shr dah-sing jee-chahng. jar jun dah!","جیا یوئے، جَ شی دا شنگ جی چانگ۔ جَر جن دا!"],"是啊。现在几点？":["shr ah. shyen-dzai jee dyen?","شی آ۔ شیان زائی جی دیان؟"],"现在十二点半。还早呢，你不要忙。":["shyen-dzai shr-are dyen bahn. hi dzaow nuh, nee boo-yaow mahng","شیان زائی شی آر دیان بان۔ ہائی زاؤ نَ، نی بو یاؤ مانگ۔"],"你的飞机票呢？":["nee duh fay-jee pyaow nuh?","نی دَ فے جی پیاؤ نَ؟"],"在手机里，你看！":["dzai show-jee lee, nee kahn!","زائی شو جی لی، نی کان!"],"好。我们去喝杯茶吧。":["how. wuh-men chyoo huh bay chah bah","ہاؤ۔ وو من چیو ہَ بے چھا با۔"],"好的。你到法国后，给我打电话。":["how duh. nee daow fah-gwuh ho, gay wuh dah dyen-hwah","ہاؤ دَ۔ نی داؤ فا گوو ہو، گے وو دا دیان ہوا۔"],"好的。我也想你们。":["how duh. wuh yeh shyahng nee-men","ہاؤ دَ۔ وو یے شیانگ نی من۔"],"大兴机场":["dah-sing jee-chahng","دا شنگ جی چانگ"],"飞机票":["fay-jee pyaow","فے جی پیاؤ"],"票":["pyaow","پیاؤ"],"早":["dzaow","زاؤ"],"啊":["ah","آ"],"同学们，你们都到了吗？":["tong-shweh-men, nee-men doh daow luh mah?","تونگ شوئے من، نی من دو داؤ لَ ما؟"],"到了！":["daow luh!","داؤ لَ!"],"这一年，你们学了不少汉语，也会写汉字了。":["juh ee nyen, nee-men shweh luh boo shaow hahn-yoo, yeh hway shyeh hahn-dzuh luh","جَ ای نیان، نی من شوئے لَ بو شاؤ ہان یو، یے ہوئے شیے ہان زَ لَ۔"],"谢谢您，王老师！":["shyeh-shyeh neen, wahng laow-shr!","شیے شیے نین، وانگ لاؤ شی!"],"老师，我们很想您！":["laow-shr, wuh-men hun shyahng neen!","لاؤ شی، وو من ہن شیانگ نین!"],"我也想你们。明年你们再来中国吧！":["wuh yeh shyahng nee-men. ming-nyen nee-men dzai lai jong-gwuh bah!","وو یے شیانگ نی من۔ منگ نیان نی من زائی لائی ژونگ گوو با!"],"好！大兴机场见！":["how! dah-sing jee-chahng jyen!","ہاؤ! دا شنگ جی چانگ جیان!"],"年":["nyen","نیان"]};
+const UR={"妈种麻，我放马。马吃麻，妈骂马。": "ماں سن بوتی ہے، میں گھوڑا چراتا ہوں۔ گھوڑا سن کھاتا ہے، ماں گھوڑے کو ڈانٹتی ہے۔", "AI小语，你好！": "اے آئی شیاؤیو، ہیلو!", "王老师，你好！": "محترمہ وانگ، ہیلو!", "你好": "ہیلو", "王老师": "محترمہ وانگ (استاد)", "大家好！": "سب کو ہیلو!", "老师，您好！": "استاد صاحب، آپ کو سلام!", "你们好！": "آپ سب کو ہیلو!", "你好，小语！": "ہیلو، شیاؤیو!", "大家": "سب لوگ", "好": "اچھا", "学生": "طالب علم", "们": "جمع بنانے کا لاحقہ", "老师": "استاد", "您": "آپ (عزت کے ساتھ)", "你们": "آپ سب (جمع)", "谢谢！": "شکریہ!", "不客气！": "کوئی بات نہیں!", "同学们，再见！": "ہم جماعتو، خدا حافظ!", "老师，再见！": "استاد صاحب، خدا حافظ!", "谢谢": "شکریہ", "不客气": "کوئی بات نہیں", "同学": "ہم جماعت", "再见": "خدا حافظ", "请问，你叫什么名字？": "معاف کیجیے، آپ کا نام کیا ہے؟", "我叫陈天中。": "میرا نام چن تیانژونگ ہے۔", "请问": "معاف کیجیے", "你": "آپ (واحد)", "叫": "نام ہونا", "什么": "کیا", "名字": "نام", "我": "میں", "你好，安妮！": "ہیلو، اینی!", "你好，陈天中！我不是安妮，我是白家月。": "ہیلو چن تیانژونگ! میں اینی نہیں ہوں، میں بائی جیایوئے ہوں۔", "对不起！": "معذرت!", "没关系！": "کوئی بات نہیں!", "不": "نہیں", "是": "ہونا (ہے)", "对不起": "معذرت", "没关系": "کوئی بات نہیں", "没事": "کوئی مسئلہ نہیں", "我是中国人。": "میں چینی ہوں۔", "我是法国人。我的中文老师也是中国人。": "میں فرانسیسی ہوں۔ میرے چینی زبان کے استاد بھی چینی ہیں۔", "人": "انسان؛ شخص", "的": "کا، کی، کے (تعلق کا لاحقہ)", "中国": "چین", "法国": "فرانس", "中文": "چینی زبان", "这是谁？": "یہ کون ہے؟", "这是我女朋友。": "یہ میری گرل فرینڈ ہے۔", "你女朋友是哪国人？": "آپ کی گرل فرینڈ کس ملک کی ہے؟", "她也是泰国人。": "وہ بھی تھائی لینڈ کی ہے۔", "这": "یہ", "谁": "کون", "女朋友": "گرل فرینڈ", "哪": "کون سا", "国": "ملک", "她": "وہ (عورت)", "泰国": "تھائی لینڈ", "喂，一飞！": "ہیلو، ای فے!", "姐姐！": "باجی!", "你工作还忙吗？": "کیا آپ کا کام ابھی بھی مصروف ہے؟", "对，还很忙。你也很忙吗？": "ہاں، ابھی بھی بہت مصروف ہوں۔ کیا آپ بھی بہت مصروف ہیں؟", "我不太忙。我们很想你。": "میں زیادہ مصروف نہیں ہوں۔ ہمیں آپ کی بہت یاد آتی ہے۔", "我也想你们。": "مجھے بھی آپ سب کی یاد آتی ہے۔", "喂": "ہیلو", "姐姐": "بڑی بہن", "工作": "کام؛ نوکری", "还": "ابھی بھی", "忙": "مصروف", "吗": "کیا (سوالیہ لفظ)", "对": "درست؛ ٹھیک", "太": "بہت زیادہ", "我们": "ہم", "想": "یاد کرنا", "一飞忙吗？": "کیا ای فے مصروف ہے؟", "她很忙。": "وہ بہت مصروف ہے۔", "她有多少个学生？": "اس کے کتنے طالب علم ہیں؟", "她有二十个学生。": "اس کے بیس طالب علم ہیں۔", "有": "رکھنا؛ ہونا", "多少": "کتنے", "个": "گنتی کا عمومی لفظ", "我有两个哥哥，你呢？": "میرے دو بڑے بھائی ہیں، اور آپ کے؟", "我没有哥哥。": "میرا کوئی بڑا بھائی نہیں ہے۔", "你家有几口人？": "آپ کے گھر میں کتنے افراد ہیں؟", "我家有四口人，爸爸、妈妈、妹妹和我。": "میرے گھر میں چار افراد ہیں: ابو، امی، چھوٹی بہن اور میں۔", "哥哥": "بڑا بھائی", "呢": "اور (سوال کا لفظ)", "没有": "نہیں ہے", "家": "گھر؛ خاندان", "几": "کتنے", "口": "افراد گننے کا لفظ", "爸爸": "ابو", "妈妈": "امی", "妹妹": "چھوٹی بہن", "和": "اور", "这是您儿子吗？": "کیا یہ آپ کا بیٹا ہے؟", "是的。我有两个孩子，一个儿子，一个女儿。": "جی ہاں۔ میرے دو بچے ہیں، ایک بیٹا اور ایک بیٹی۔", "您儿子几岁？": "آپ کے بیٹے کی عمر کتنی ہے؟", "他今年五岁。": "وہ پانچ سال کا ہے۔", "您女儿多大？": "آپ کی بیٹی کتنی بڑی ہے؟", "她今年十二。": "وہ بارہ سال کی ہے۔", "儿子": "بیٹا", "孩子": "بچے", "女儿": "بیٹی", "岁": "سال (عمر)", "他": "وہ (مرد)", "今年": "اس سال", "多": "کتنا", "大": "بڑا (عمر میں)", "今天几号？": "آج کیا تاریخ ہے؟", "今天9月8号。": "آج آٹھ ستمبر ہے۔", "星期几？": "آج کون سا دن ہے؟", "星期日。今天我休息。": "اتوار ہے۔ آج میری چھٹی ہے۔", "今天": "آج", "号": "تاریخ", "月": "مہینہ", "日": "دن", "星期": "ہفتہ", "星期日": "اتوار", "星期天": "اتوار", "休息": "آرام کرنا", "你会做饭吗？": "کیا آپ کھانا پکانا جانتے ہیں؟", "我会做。": "جی ہاں، میں پکا سکتا ہوں۔", "你会做什么？": "آپ کیا بنا سکتے ہیں؟", "我会做面条儿、饺子，也会做一些菜。星期天我也做饭。": "میں نوڈلز، ڈمپلنگز اور کچھ سالن بنا سکتا ہوں۔ اتوار کو بھی میں کھانا پکاتا ہوں۔", "会": "سکنا؛ آتا ہونا", "做饭": "کھانا پکانا", "做": "بنانا", "面条儿": "نوڈلز", "饺子": "چینی ڈمپلنگز", "一些": "کچھ", "菜": "سالن؛ ڈش", "同乐，下班吗？": "تونگ لے، کیا چھٹی ہو گئی؟", "下班。": "جی، ہو گئی۔", "这是你的新电脑吗？": "کیا یہ آپ کا نیا کمپیوٹر ہے؟", "是的，是我的新电脑。": "جی ہاں، یہ میرا نیا کمپیوٹر ہے۔", "真好看！": "واقعی بہت خوبصورت ہے!", "我也很喜欢它。": "مجھے بھی یہ بہت پسند ہے۔", "下班": "کام سے چھٹی ہونا", "新": "نیا", "电脑": "کمپیوٹر", "真": "واقعی", "好看": "خوبصورت", "喜欢": "پسند کرنا", "它": "یہ (بے جان چیز)", "家月，你的手机号是多少？": "جیایوئے، آپ کا موبائل نمبر کیا ہے؟", "我的手机号是+33 601493190。": "میرا موبائل نمبر +33 601493190 ہے۔", "我的手机号是+86 13552721160。": "میرا موبائل نمبر +86 13552721160 ہے۔", "好的。": "ٹھیک ہے۔", "手机": "موبائل فون", "电话": "ٹیلی فون؛ فون کال", "家月，明天你去哪儿？": "جیایوئے، کل آپ کہاں جا رہی ہیں؟", "我想去超市买东西。": "میں سپر مارکیٹ جا کر سامان خریدنا چاہتی ہوں۔", "你去超市买什么？": "آپ سپر مارکیٹ سے کیا خریدیں گی؟", "我想买些牛奶。": "میں تھوڑا دودھ خریدنا چاہتی ہوں۔", "明天": "کل (آنے والا)", "去": "جانا", "哪儿": "کہاں", "超市": "سپر مارکیٹ", "买": "خریدنا", "东西": "چیز؛ سامان", "些": "کچھ؛ تھوڑا", "牛奶": "دودھ", "星期天我们去哪儿吃晚饭？": "اتوار کو ہم رات کا کھانا کہاں کھانے جائیں گے؟", "我还想去西安饭店。": "میں پھر سے شیان ریسٹورنٹ جانا چاہتا ہوں۔", "那边的包子非常好吃，我想吃包子。": "وہاں کے باؤزے بہت مزے دار ہوتے ہیں، میں باؤزے کھانا چاہتی ہوں۔", "妈妈，我想吃米饭，不想吃包子。": "امی، میں چاول کھانا چاہتا ہوں، باؤزے نہیں۔", "好的。我们怎么去？": "ٹھیک ہے۔ ہم کیسے جائیں گے؟", "坐出租车去。": "ٹیکسی میں جائیں گے۔", "吃": "کھانا", "晚饭": "رات کا کھانا", "那边": "وہاں", "包子": "باؤزے (بھرے ہوئے بن)", "非常": "بہت زیادہ", "好吃": "مزے دار", "米饭": "چاول", "怎么": "کیسے", "坐": "سوار ہونا", "出租车": "ٹیکسی", "西安饭店": "شیان ریسٹورنٹ", "现在几点？": "اب کیا وقت ہوا ہے؟", "早上八点四十。": "صبح کے آٹھ بج کر چالیس منٹ ہوئے ہیں۔", "我上午十点十分有课。": "میری صبح دس بج کر دس منٹ پر کلاس ہے۔", "好的，我们下午两点见吧。": "ٹھیک ہے، ہم دوپہر کے دو بجے ملتے ہیں۔", "现在": "اب", "点": "بجے", "早上": "صبح سویرے", "上午": "صبح (دوپہر سے پہلے)", "分": "منٹ", "课": "کلاس؛ سبق", "下午": "دوپہر کے بعد", "见": "ملنا", "吧": "تجویز کا لفظ (آئیے)", "下午我想去电影院看电影，你去吗？": "آج دوپہر کے بعد میں سنیما میں فلم دیکھنے جانا چاہتا ہوں، کیا آپ جائیں گی؟", "我不想去，下午还有事。": "میں نہیں جانا چاہتی، دوپہر کے بعد میرا کام ہے۔", "好的。明天呢？": "ٹھیک ہے۔ اور کل؟", "我明天下午两点还上课呢，四点半下课。": "کل دوپہر دو بجے میری کلاس ہے اور ساڑھے چار بجے ختم ہوتی ہے۔", "电影院": "سنیما", "看": "دیکھنا", "电影": "فلم", "事": "کام؛ بات", "上课": "کلاس میں جانا", "半": "آدھا", "下课": "کلاس ختم ہونا", "喂，你在哪儿呢？": "ہیلو، آپ کہاں ہیں؟", "我在家里呢。": "میں گھر پر ہوں۔", "我晚上六点半下班。": "میں شام ساڑھے چھ بجے کام سے فارغ ہوتی ہوں۔", "我八点去医院上班。": "میں آٹھ بجے ہسپتال کام پر جاؤں گا۔", "好的，你去店里买些菜吧。": "ٹھیک ہے، آپ دکان سے کچھ سبزی لے آئیں۔", "好，我十分钟后去。": "ٹھیک ہے، میں دس منٹ بعد جاتا ہوں۔", "在": "میں؛ پر (جگہ کے لیے)", "里": "اندر", "晚上": "شام؛ رات", "医院": "ہسپتال", "上班": "کام پر جانا", "店": "دکان", "分钟": "منٹ", "后": "بعد", "房间外有一只小猫。": "کمرے کے باہر ایک چھوٹی بلی ہے۔", "我没看见，它在哪儿呢？": "مجھے نظر نہیں آئی، وہ کہاں ہے؟", "它在桌子下呢。": "وہ میز کے نیچے ہے۔", "这只小猫真漂亮！": "یہ چھوٹی بلی کتنی خوبصورت ہے!", "房间": "کمرہ", "外": "باہر", "只": "جانوروں کے لیے گنتی کا لفظ", "小": "چھوٹا", "猫": "بلی", "没": "نہیں (ابھی تک نہیں)", "看见": "نظر آنا", "桌子": "میز", "下": "نیچے", "漂亮": "خوبصورت", "我们在哪儿见呢？": "ہم کہاں ملیں گے؟", "在学校书店前见吧。": "آئیں، اسکول کی کتابوں کی دکان کے سامنے ملتے ہیں۔", "好的。下午两点你能到吗？": "ٹھیک ہے۔ کیا آپ دوپہر دو بجے پہنچ سکتے ہیں؟", "我能到。我在学校吃午饭。": "جی ہاں، پہنچ سکتا ہوں۔ میں اسکول میں دوپہر کا کھانا کھاؤں گا۔", "学校": "اسکول", "书店": "کتابوں کی دکان", "前": "سامنے", "能": "سکنا", "到": "پہنچنا", "午饭": "دوپہر کا کھانا", "小胡，还没吃饭呢？": "شیاؤ ہو، کیا آپ نے ابھی کھانا نہیں کھایا؟", "没吃呢。": "نہیں، ابھی نہیں کھایا۔", "大医院病人多，医生非常忙。": "بڑے ہسپتالوں میں مریض بہت ہوتے ہیں اور ڈاکٹر بہت مصروف رہتے ہیں۔", "是的。我爸爸也在医院工作，他也非常忙。": "جی ہاں۔ میرے ابو بھی ہسپتال میں کام کرتے ہیں اور وہ بھی بہت مصروف ہیں۔", "你家有两个医生？": "آپ کے گھر میں دو ڈاکٹر ہیں؟", "对。": "جی ہاں۔", "饭": "کھانا", "病人": "مریض", "医生": "ڈاکٹر", "胡医生": "ڈاکٹر ہو","学校前边有一家电影院。":"اسکول کے سامنے ایک سنیما ہے۔","对。我们晚上去那个电影院看电影吧。":"ہاں۔ آج رات اس سنیما میں فلم دیکھنے چلیں۔","好！我们七点在电影院外边见，好吗？":"ٹھیک! سات بجے سنیما کے باہر ملیں، ٹھیک ہے؟","好的，晚上七点见！":"ٹھیک ہے، رات سات بجے ملتے ہیں!","前边":"سامنے","边":"طرف؛ کنارہ","那个":"وہ","外边":"باہر","椅子上有一本中文书，那是谁的书？":"کرسی پر ایک چینی کتاب ہے، وہ کس کی کتاب ہے؟","是我的书，谢谢。这是我的第二本中文书。":"یہ میری کتاب ہے، شکریہ۔ یہ میری دوسری چینی کتاب ہے۔","不客气。你明天上午在哪儿？":"کوئی بات نہیں۔ تم کل صبح کہاں ہو گے؟","我明天上午在学校学习。":"میں کل صبح اسکول میں پڑھوں گا۔","椅子":"کرسی","上":"اوپر؛ کے اوپر","本":"کتابوں کا پیمانہ لفظ","书":"کتاب","那":"وہ","第":"ترتیبی عدد کا لاحقہ","学习":"پڑھنا؛ سیکھنا","明天星期六，你做什么？":"کل ہفتہ ہے، تم کیا کرو گے؟","我白天在家里读书，晚上和朋友们去外边唱歌。":"میں دن میں گھر پر پڑھتا ہوں، شام کو دوستوں کے ساتھ باہر گانے جاتا ہوں۔","你唱歌很好听。":"تم بہت اچھا گاتے ہو۔","谢谢！您星期六做什么？":"شکریہ! آپ ہفتے کو کیا کریں گی؟","我在家里做饭、看电视，和孩子们、小狗玩。":"میں گھر پر کھانا پکاؤں گی، ٹی وی دیکھوں گی اور بچوں اور کتے کے ساتھ کھیلوں گی۔","我也有一只小狗。":"میرے پاس بھی ایک چھوٹا کتا ہے۔","白天":"دن؛ دن کا وقت","读书":"کتاب پڑھنا","朋友":"دوست","唱":"گانا","歌":"گانا (نغمہ)","好听":"سننے میں اچھا","电视":"ٹیلی ویژن","狗":"کتا","玩":"کھیلنا؛ مزہ کرنا","请问，有杯子吗？":"معاف کیجیے، کیا کپ ہیں؟","有，杯子在这边。":"جی ہاں، کپ اس طرف ہیں۔","多少钱一个？":"ایک کتنے کا ہے؟","这些五块钱一个，那些十块钱一个。":"یہ پانچ یوان کا ایک ہے اور وہ دس یوان کا ایک ہے۔","我买这个吧。":"میں یہ والا لے لیتی ہوں۔","杯子":"کپ؛ گلاس","售货员":"دکان کا ملازم","这边":"اس طرف","钱":"پیسے","这些":"یہ (جمع)","块":"یوان (کاغذی رقم)","那些":"وہ (جمع)","这儿的水果真不少！":"یہاں پھل واقعی بہت ہیں!","您想买什么？":"آپ کیا خریدنا چاہتی ہیں؟","我想买两斤苹果。":"میں دو جن سیب خریدنا چاہتی ہوں۔","苹果三块五一斤。这些七块二，七块钱吧。":"سیب ساڑھے تین یوان کا ایک جن ہے۔ یہ سات یوان بیس فین بنے، سات یوان ہی دے دیں۔","好的，这儿的苹果真便宜！":"ٹھیک ہے، یہاں کے سیب واقعی سستے ہیں!","这儿":"یہاں","水果":"پھل","少":"کم","斤":"جن (آدھا کلو)","苹果":"سیب","便宜":"سستا","这家商店衣服真多！这件一百元，怎么样？":"اس دکان میں کپڑے بہت ہیں! یہ والا سو یوان کا ہے، کیسا ہے؟","好看，也不贵。":"اچھا لگتا ہے اور مہنگا بھی نہیں۔","小雪能穿，买一件吧。":"شیاؤ شوئے پہن سکتی ہے، ایک لے لیتے ہیں۔","好的。小明能穿吗？":"ٹھیک ہے۔ کیا شیاؤ منگ پہن سکتا ہے؟","不能。这些是女孩子穿的衣服，男孩子的衣服在那儿。":"نہیں۔ یہ لڑکیوں کے کپڑے ہیں، لڑکوں کے کپڑے وہاں ہیں۔","商店":"دکان","衣服":"کپڑے","件":"کپڑوں کا پیمانہ لفظ","元":"یوان (چینی کرنسی)","怎么样":"کیسا","贵":"مہنگا","穿":"پہننا","女":"عورت؛ لڑکی","男":"مرد؛ لڑکا","那儿":"وہاں","喂，李文，你什么时候能到饭店？":"ہیلو، لی ون، تم ریستوراں کب پہنچ سکو گے؟","还不知道，正在找呢。它是不是在超市后边？":"ابھی معلوم نہیں، ڈھونڈ رہا ہوں۔ کیا وہ سپر مارکیٹ کے پیچھے ہے؟","是的。你开车没开车？":"ہاں۔ کیا تم گاڑی چلا رہے ہو یا نہیں؟","我没开车，坐车呢。":"میں گاڑی نہیں چلا رہا، سواری میں بیٹھا ہوں۔","时候":"وقت","饭店":"ریستوراں؛ ہوٹل","知道":"جاننا","正在":"(کام) ہو رہا ہے","找":"ڈھونڈنا","开车":"گاڑی چلانا","车":"گاڑی","你还在读大学吗？":"کیا تم ابھی یونیورسٹی میں پڑھ رہے ہو؟","对，我读大学呢，还是大学生。":"ہاں، میں یونیورسٹی میں پڑھ رہا ہوں، ابھی طالب علم ہوں۔","你们学习忙不忙？":"کیا تم لوگ پڑھائی میں مصروف ہو؟","非常忙，我学医，我们的课很多。":"بہت مصروف، میں طب پڑھتا ہوں اور ہمارے بہت سے لیکچر ہیں۔","读":"پڑھنا","大学":"یونیورسٹی","大学生":"یونیورسٹی کا طالب علم","学":"سیکھنا","医":"طب","弟弟起床没起床呢？":"کیا چھوٹا بھائی اٹھ گیا؟","没起床呢，还在睡觉。":"نہیں اٹھا، ابھی سو رہا ہے۔","还睡呢？他今天去不去那里？":"ابھی تک سو رہا ہے؟ کیا وہ آج وہاں جائے گا؟","去哪里？":"کہاں؟","去超市。":"سپر مارکیٹ۔","我昨天问他，他对我说，他不去，他今天要和小朋友玩。":"میں نے کل اس سے پوچھا، اس نے کہا وہ نہیں جائے گا، آج وہ دوستوں کے ساتھ کھیلے گا۔","弟弟":"چھوٹا بھائی","起床":"بستر سے اٹھنا","睡觉":"سونا","睡":"سونا","那里":"وہاں","哪里":"کہاں","昨天":"کل (گزشتہ)","问":"پوچھنا","说":"کہنا","要":"چاہنا؛ ارادہ ہونا","小朋友":"بچہ","今天天气怎么样？":"آج موسم کیسا ہے؟","这里的天不太好，下雨了。":"یہاں کا موسم اچھا نہیں، بارش ہو رہی ہے۔","雨大吗？":"کیا بارش تیز ہے؟","有点儿大，我觉得很冷。":"تھوڑی تیز ہے اور مجھے بہت سردی لگ رہی ہے۔","天气":"موسم","这里":"یہاں","天":"موسم؛ دن","下雨":"بارش ہونا","了":"(تبدیلی ظاہر کرنے والا لفظ)","雨":"بارش","有点儿":"تھوڑا سا","觉得":"محسوس کرنا","冷":"ٹھنڈا؛ سرد","昨天下雪了。":"کل برف باری ہوئی۔","是的，太冷了。":"ہاں، بہت ٹھنڈ تھی۔","你昨天没来公司，生病了？":"تم کل دفتر نہیں آئے، کیا بیمار ہو گئے تھے؟","对，我昨天去医院看病了。":"ہاں، میں کل ہسپتال ڈاکٹر کو دکھانے گیا تھا۔","雪":"برف","来":"آنا","公司":"کمپنی؛ دفتر","生病":"بیمار ہونا","看病":"ڈاکٹر کو دکھانا","医生，我病了。":"ڈاکٹر صاحب، میں بیمار ہو گیا ہوں۔","我看看。你觉得怎么样？":"میں دیکھتا ہوں۔ آپ کیسا محسوس کر رہے ہیں؟","我很冷。":"مجھے بہت سردی لگ رہی ہے۔","好的，吃一点儿药，今天休息半天吧。":"ٹھیک ہے، تھوڑی دوا لیں اور آج آدھا دن آرام کریں۔","回家后再喝些热水。":"گھر جانے کے بعد کچھ گرم پانی پئیں۔","病":"بیمار ہونا","一点儿":"تھوڑا سا","药":"دوا","回":"واپس جانا","再":"پھر؛ اس کے بعد","喝":"پینا","热":"گرم","水":"پانی","王老师，我可以再问您一个问题吗？":"محترمہ وانگ، کیا میں آپ سے ایک اور سوال پوچھ سکتی ہوں؟","可以。你有什么问题？":"جی ہاں۔ آپ کا کیا سوال ہے؟","那个小店卖不卖手机？":"کیا وہ چھوٹی دکان موبائل فون بیچتی ہے؟","我不知道。你可以打电话问一下。":"مجھے معلوم نہیں۔ آپ فون کر کے پوچھ سکتی ہیں۔","可以":"سکنا؛ اجازت ہے","问题":"سوال؛ مسئلہ","卖":"بیچنا","打电话":"فون کرنا","一下":"ذرا (ایک بار)","女士，请坐！您喝什么？":"محترمہ، تشریف رکھیے! آپ کیا پئیں گی؟","我看一下。请给我一杯牛奶。":"میں ذرا دیکھ لوں۔ مجھے ایک گلاس دودھ دیجیے۔","好的。您还要什么？":"ٹھیک ہے۔ آپ کو اور کچھ چاہیے؟","我还没吃早饭，再要这个面包和鸡蛋吧。":"میں نے ابھی ناشتہ نہیں کیا، یہ ڈبل روٹی اور انڈہ بھی دے دیں۔","服务员":"ویٹر؛ ویٹریس","女士":"خاتون؛ محترمہ","请":"براہِ کرم","给":"دینا","杯":"کپ؛ گلاس","早饭":"ناشتہ","这个":"یہ","面包":"ڈبل روٹی","鸡蛋":"انڈہ","先生，请坐！您要什么？":"جناب، تشریف رکھیے! آپ کیا لیں گے؟","我要一斤饺子。":"مجھے ایک جن جیاؤزی (ڈمپلنگ) چاہییں۔","好的。一斤饺子四十个。":"ٹھیک ہے۔ ایک جن میں چالیس جیاؤزی ہوتی ہیں۔","四十个太多了，我要一半吧。":"چالیس بہت زیادہ ہیں، میں آدھے لیتا ہوں۔","半斤二十个。您想喝什么？":"آدھا جن بیس ہوتی ہیں۔ آپ کیا پینا چاہیں گے؟","请给我一杯茶吧。":"مجھے ایک کپ چائے دیجیے۔","先生":"جناب؛ صاحب","一半":"آدھا","茶":"چائے","你们上火车后看见王老师了吗？":"کیا ٹرین میں سوار ہونے کے بعد تم نے محترمہ وانگ کو دیکھا؟","没看见。中午车开后，有些人在看书，有些人睡觉了。":"نہیں دیکھا۔ دوپہر کو ٹرین چلنے کے بعد کچھ لوگ کتاب پڑھ رہے تھے اور کچھ سو گئے۔","你呢？":"اور تم؟","我看了一个电影。":"میں نے ایک فلم دیکھی۔","火车":"ٹرین","中午":"دوپہر","开":"(گاڑی کا) روانہ ہونا","有些":"کچھ (لوگ)","有的":"کچھ","你们会说汉语了，也会写汉字了吗？":"اب تم چینی بول سکتے ہو، کیا چینی حروف لکھ بھی سکتے ہو؟","我们都会写了。":"ہم سب لکھ سکتے ہیں۔","老师，我听不见。":"استاد صاحبہ، مجھے سنائی نہیں دے رہا۔","请大家不要说话！请听老师的问题：你们都会写哪些汉字了？":"سب خاموش ہو جائیں! میرا سوال سنیں: آپ سب کون سے چینی حروف لکھ سکتے ہیں؟","我会写这些字了，您看！":"میں یہ حروف لکھ سکتا ہوں، دیکھیے!","写":"لکھنا","都":"سب؛ دونوں","听见":"سنائی دینا","不要":"نہ کرو","说话":"بات کرنا","听":"سننا","哪些":"کون سے (جمع)","字":"حرف؛ لفظ","汉语":"چینی زبان","汉字":"چینی حرف","明年女儿上中学。":"اگلے سال بیٹی مڈل اسکول جائے گی۔","对。儿子也上小学了。":"ہاں۔ بیٹا بھی پرائمری اسکول جائے گا۔","我们家有了一个中学生。":"ہمارے گھر میں ایک مڈل اسکول کا طالب علم ہو گیا۔","还有了一个小学生。":"اور ایک پرائمری اسکول کا طالب علم بھی۔","上学后，他们都忙了。":"اسکول جانے کے بعد وہ دونوں مصروف ہو جائیں گے۔","是的。太晚了，睡觉吧。":"ہاں۔ بہت دیر ہو گئی، سو جاتے ہیں۔","明年":"اگلا سال","中学":"مڈل/ثانوی اسکول","小学":"پرائمری اسکول","中学生":"مڈل اسکول کا طالب علم","小学生":"پرائمری اسکول کا طالب علم","上学":"اسکول جانا","他们":"وہ سب (مرد/عام)","她们":"وہ سب (خواتین)","它们":"وہ سب (چیزیں)","晚":"دیر؛ دیر سے", "王老师，下个星期六我回法国。": "محترمہ وانگ، آنے والے ہفتہ کے دن میں فرانس واپس جا رہی ہوں۔","你坐飞机回去吗？": "کیا آپ ہوائی جہاز سے واپس جا رہی ہیں؟","对，坐飞机。": "جی ہاں، ہوائی جہاز سے۔","飞机几点走？": "جہاز کتنے بجے روانہ ہوگا؟","下午三点。": "دوپہر کے بعد تین بجے۔","好。你下午一点到机场吧。": "ٹھیک ہے۔ آپ دوپہر کے بعد ایک بجے ہوائی اڈے پہنچ جائیں۔","下个": "اگلا","星期六": "ہفتہ (دن)","回去": "واپس جانا","飞机": "ہوائی جہاز","走": "روانہ ہونا؛ جانا","机场": "ہوائی اڈہ","家月，这是大兴机场。这儿真大！": "جیایوئے، یہ داشنگ ہوائی اڈہ ہے۔ یہ جگہ واقعی بہت بڑی ہے!","是啊。现在几点？": "ہاں، واقعی۔ اب کیا وقت ہوا ہے؟","现在十二点半。还早呢，你不要忙。": "اب ساڑھے بارہ بجے ہیں۔ ابھی کافی وقت ہے، آپ جلدی نہ کریں۔","你的飞机票呢？": "آپ کا ہوائی ٹکٹ کہاں ہے؟","在手机里，你看！": "موبائل میں ہے، دیکھیں!","好。我们去喝杯茶吧。": "ٹھیک ہے۔ چلیں، ایک کپ چائے پیتے ہیں۔","好的。你到法国后，给我打电话。": "ٹھیک ہے۔ فرانس پہنچ کر مجھے فون کرنا۔","好的。我也想你们。": "ٹھیک ہے۔ مجھے بھی آپ سب کی یاد آئے گی۔","大兴机场": "داشنگ ہوائی اڈہ (بیجنگ)","飞机票": "ہوائی ٹکٹ","票": "ٹکٹ","早": "جلدی؛ ابتدائی","啊": "تائید یا حیرت کا لفظ","同学们，你们都到了吗？": "ہم جماعتو، کیا آپ سب پہنچ گئے ہیں؟","到了！": "پہنچ گئے!","这一年，你们学了不少汉语，也会写汉字了。": "اس ایک سال میں آپ نے کافی چینی زبان سیکھ لی ہے اور چینی حروف لکھنا بھی آ گیا ہے۔","谢谢您，王老师！": "آپ کا شکریہ، محترمہ وانگ!","老师，我们很想您！": "استاد صاحبہ، ہمیں آپ کی بہت یاد آئے گی!","我也想你们。明年你们再来中国吧！": "مجھے بھی آپ سب کی یاد آئے گی۔ اگلے سال آپ پھر چین آئیے!","好！大兴机场见！": "ٹھیک ہے! داشنگ ہوائی اڈے پر ملتے ہیں!","年": "سال"};
+/* ---------- helpers ---------- */
+const byId=id=>document.getElementById(id);
+const menuEl=byId("menu"),lessonEl=byId("lesson"),noteEl=byId("note"),spdBtn=byId("spd"),stopBtn=byId("stopBtn"),trBtn=byId("trb"),urBtn=byId("urt"),toastEl=byId("toast");
+const $=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const sleep=ms=>new Promise(f=>setTimeout(f,ms));
+const ICON='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4H4z" fill="currentColor"/><path d="M15.4 8.6a4.9 4.9 0 0 1 0 6.8M18.2 5.9a8.7 8.7 0 0 1 0 12.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+let toastTimer=0;
+function toast(m){toastEl.textContent=m;toastEl.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove("show"),4500)}
+
+/* ---------- text blocks ---------- */
+const pr=z=>{const p=PR[z];return p?`<div class="sound"><div class="pr">${p[0]}</div><div class="ur prx" lang="ur" dir="rtl">${p[1]}</div></div>`:""};
+const tru=z=>{const u=UR[z];return u?`<div class="ur ut" lang="ur" dir="rtl">${u}<button class="pill urb" data-z="${esc(z)}" aria-label="Play Urdu audio">${ICON}<span lang="ur">اردو</span></button></div>`:""};
+
+/* ---------- speech ---------- */
+const synth=window.speechSynthesis;
+let rate=.6,tok=0,voice=null,go=null,trOn=true,urOn=true;
+const keep=new Set(); /* keeps utterances alive so Chrome cannot garbage-collect them mid-speech */
+const voices=()=>synth?synth.getVoices():[];
+const zhVoice=()=>voices().find(x=>/zh[-_]CN/i.test(x.lang))||voices().find(x=>/^zh/i.test(x.lang))||null;
+const enVoice=()=>voices().find(x=>/^en[-_]/i.test(x.lang))||null;
+const urVoice=()=>voices().find(x=>/^ur([-_]|$)/i.test(x.lang))||null;
+function pv(){
+ if(!synth){noteEl.textContent="This browser has no speech support, so Chinese and English audio are unavailable.";return}
+ voice=zhVoice();const u=urVoice();
+ noteEl.textContent=(voice?"Chinese voice: "+voice.name+" ("+voice.lang+"). ":"No Chinese voice found. Install a Chinese (Mandarin) text-to-speech voice in your phone settings. ")+
+  (u?"Urdu voice: "+u.name+".":"No Urdu voice installed, so Urdu audio plays online and needs internet.")}
+pv();if(synth)synth.onvoiceschanged=pv;
+
+/* Speak through the device voices. Resolves true when it spoke (or was stopped), false when it failed silently. */
+function utter(text,lang,pick,pitch,btn,watchdog){
+ return new Promise(res=>{
+  if(!synth)return res(false);
+  const my=tok,u=new SpeechSynthesisUtterance(text);
+  u.lang=lang;const v=pick&&pick();if(v){u.voice=v;u.lang=v.lang}
+  u.rate=rate;if(pitch)u.pitch=pitch;
+  keep.add(u);btn&&btn.classList.add("on");
+  let started=false,done=false,timer=0;
+  const fin=ok=>{if(done)return;done=true;clearTimeout(timer);keep.delete(u);btn&&btn.classList.remove("on");res(ok)};
+  u.onstart=()=>{started=true;clearTimeout(timer)};
+  u.onend=()=>fin(true);
+  u.onerror=e=>fin(started||my!==tok||e.error==="interrupted"||e.error==="canceled");
+  /* Chrome drops a speak() that comes in the same tick as cancel(), so wait a moment first */
+  setTimeout(()=>{
+   if(my!==tok)return fin(true);
+   if(synth.paused)synth.resume();
+   synth.speak(u);
+   if(watchdog)timer=setTimeout(()=>{if(!started){synth.cancel();fin(false)}},watchdog)
+  },60)})}
+const say=(x,p,b)=>utter(x,"zh-CN",()=>voice,p||1,b);
+const sayEn=(x,b)=>utter(x,"en-US",enVoice,0,b);
+
+/* ---------- Urdu: device voice first, online audio as fallback ---------- */
+const SILENT="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YQAAAAA=";
+const A=new Audio();A.preload="auto";A.referrerPolicy="no-referrer";
+let audStop=null,unlocked=false;
+function stopAudio(){try{A.pause()}catch(e){}if(audStop){const f=audStop;audStop=null;f()}}
+function chunks(t,n=150){const out=[];let cur="";(t.match(/[^۔؟!،,.?;:]+[۔؟!،,.?;:]*/g)||[t]).forEach(p=>{if(cur&&(cur+" "+p).length>n){out.push(cur.trim());cur=p}else cur=(cur+" "+p).trim()});if(cur)out.push(cur);return out}
+function playOnline(text,lang,my){
+ return new Promise(res=>{
+  const parts=chunks(text);let i=0,played=false,over=false;
+  const finish=ok=>{if(over)return;over=true;if(audStop===halt)audStop=null;A.onended=A.onerror=null;res(ok)};
+  const halt=()=>finish(played);
+  audStop=halt;
+  const next=()=>{
+   if(my!==tok||i>=parts.length)return finish(true);
+   A.onended=()=>{played=true;next()};
+   A.onerror=()=>finish(played);
+   A.src="https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl="+lang+"&q="+encodeURIComponent(parts[i++]);
+   A.defaultPlaybackRate=A.playbackRate=Math.max(.7,Math.min(1,rate+.05));
+   const p=A.play();if(p&&p.catch)p.catch(()=>finish(played))};
+  next()})}
+async function sayUr(x,b){
+ if(!x)return;
+ const my=tok;b&&b.classList.add("on");
+ let ok=false;const v=urVoice();
+ if(v)ok=await utter(x,"ur-PK",()=>v,0,null,3500);
+ if(!ok&&my===tok)ok=await playOnline(x,"ur",my);
+ b&&b.classList.remove("on");
+ if(!ok&&my===tok)toast("Urdu audio needs an Urdu voice on this device or an internet connection.")}
+
+document.addEventListener("click",e=>{
+ const b=e.target.closest(".urb");
+ if(b){stopAll();sayUr(b.dataset.u||UR[b.dataset.z],b);return}
+ if(!unlocked){unlocked=true;A.src=SILENT;const p=A.play();if(p&&p.then)p.then(()=>{if(A.src.indexOf("data:")===0)A.pause()}).catch(()=>{})} /* lets later auto-played Urdu work on iPhone */
+});
+
+function stopAll(){
+ tok++;if(go){go();go=null}
+ stopAudio();if(synth)synth.cancel();
+ document.querySelectorAll(".spk.on,.pill.on,.ntile.on,.ntile.playing").forEach(b=>b.classList.remove("on"));
+ document.querySelectorAll(".line.playing,.ntile.playing").forEach(r=>r.classList.remove("playing"))}
+
+/* ---------- builders ---------- */
+const tb=t=>{const b=$("button","pill enb",ICON+"<span>EN</span>");b.title="Play English";b.setAttribute("aria-label","Play English");b.onclick=()=>{stopAll();sayEn(t,b)};return b};
+const sb=f=>{const b=$("button","spk play",ICON);b.setAttribute("aria-label","Play Chinese");b.onclick=()=>{stopAll();f(b)};return b};
+
+function dlg(el,d){
+ const bar=$("div","bar"),all=$("button","btn",'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.2v9.6L10.5 6z" fill="currentColor"/></svg>Play all'),sel=$("select"),rp=$("button","btn alt","Role-play"),nx=$("button","btn nx hide","Next");
+ sel.setAttribute("aria-label","Choose your role");
+ sel.innerHTML="<option value=''>I play…</option>";[...new Set(d.map(x=>x[0]))].forEach(s=>sel.innerHTML+=`<option value="${s}">${SP[s][0]} ${SP[s][1]}</option>`);
+ bar.append(all,sel,rp,nx);el.append(bar);
+ const rows=d.map(([s,zh,py,en])=>{
+  const r=$("div","line"),w=$("div","who",`<b>${SP[s][0]}</b>${SP[s][1]}`),
+  t=$("div","txt",`<div class="py">${py}</div><div class="zh">${zh}</div>${pr(zh)}<div class="en">${en}</div>${tru(zh)}`);
+  t.querySelector(".en").append(tb(en));r.append(w,t,sb(b=>say(zh,SP[s][2],b)));el.append(r);return r});
+ async function run(me){
+  stopAll();const my=tok;
+  for(let i=0;i<d.length;i++){
+   if(my!==tok)return;
+   const r=rows[i];r.classList.add("playing");r.scrollIntoView({block:"nearest"});
+   if(me&&d[i][0]===me){nx.classList.remove("hide");await new Promise(f=>go=f);nx.classList.add("hide")}
+   else{
+    await say(d[i][1],SP[d[i][0]][2],r.querySelector(".spk.play"));
+    if(trOn&&my===tok){await sleep(200);await sayEn(d[i][3],null)}
+    if(urOn&&my===tok&&UR[d[i][1]]){await sleep(200);await sayUr(UR[d[i][1]],null)}}
+   r.classList.remove("playing");await sleep(300)}}
+ all.onclick=()=>run(null);
+ nx.onclick=()=>{if(go){const f=go;go=null;f()}};
+ rp.onclick=()=>sel.value?run(sel.value):toast("Choose your role first.");
+}
+function vocab(el,v){
+ const t=$("table");
+ v.forEach(([zh,py,pos,en])=>{
+  const tr=$("tr",0,`<td class="zh">${zh}</td><td><div class="py">${py}</div>${pr(zh)}<div class="en">${pos?`<i class="pos">${pos}</i> `:""}${en}</div>${tru(zh)}</td><td></td>`);
+  tr.lastChild.append(sb(b=>say(zh,1,b)));tr.children[1].querySelector(".en").append(tb(en));t.append(tr)});
+ el.append(t)}
+function show(n,scrollTop){
+ stopAll();const l=L.find(x=>x.n===n),el=lessonEl;el.innerHTML="";
+ document.querySelectorAll(".chip").forEach(c=>{const on=+c.dataset.n===n;c.classList.toggle("on",on);if(on){c.setAttribute("aria-current","true");c.scrollIntoView({inline:"center",block:"nearest"})}else c.removeAttribute("aria-current")});
+ el.append($("h2","lt",`<span class="no">Lesson ${n}</span>${l.zh}<span class="en">${l.en}</span>`));
+ l.t.forEach(x=>{
+  el.append($("h2","sec",x.h));const c=$("div","card");dlg(c,x.d);el.append(c);
+  el.append($("h3","vh","生词 New Words"));const v=$("div","card vc");vocab(v,x.v);el.append(v)});
+ if(l.tw){
+  el.append($("h2","sec","跟读绕口令 · Tongue Twister"));
+  const c=$("div","card"),r=$("div","line solo"),t=$("div","txt",`<div class="py">${l.tw[1]}</div><div class="zh">${l.tw[0]}</div>${pr(l.tw[0])}<div class="en">${l.tw[2]}</div>${tru(l.tw[0])}`);
+  t.querySelector(".en").append(tb(l.tw[2]));r.append(t,sb(b=>say(l.tw[0],1,b)));c.append(r);el.append(c)}
+ if(scrollTop)window.scrollTo(0,0)}
+
+/* ---------- counting ---------- */
+const PLAY='<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.2v9.6L10.5 6z" fill="currentColor"/></svg>';
+const DG=["零","一","二","三","四","五","六","七","八","九"];
+/* per character: [pinyin, English respelling, Urdu respelling] */
+const CH={"零":["líng","ling","لنگ"],"一":["yī","ee","ای"],"二":["èr","are","آر"],"两":["liǎng","lyahng","لیانگ"],"三":["sān","sahn","سان"],"四":["sì","suh","سی"],"五":["wǔ","woo","وو"],"六":["liù","lyo","لیو"],"七":["qī","chee","چی"],"八":["bā","bah","با"],"九":["jiǔ","jyo","جیو"],"十":["shí","shr","شی"],"百":["bǎi","bye","بائی"],"千":["qiān","chyen","چیان"],"万":["wàn","wahn","وان"],"亿":["yì","ee","ای"]};
+const YI_BEFORE={"百":"yì","千":"yì","万":"yí","亿":"yí"}; /* 一 changes tone before a multiplier; as a digit before 十 it stays yī */
+function grp(v,lead){ /* 1–9999 as characters */
+ const dg=[Math.floor(v/1000),Math.floor(v/100)%10,Math.floor(v/10)%10,v%10],un=["千","百","十",""],o=[];let st=false,pend=false;
+ for(let i=0;i<4;i++){const d=dg[i];
+  if(d===0){if(st)pend=true;continue}
+  if(pend){o.push("零");pend=false}
+  if(i===2&&d===1&&!st&&lead)o.push("十"); /* 10–19 start with 十, not 一十 */
+  else{o.push(d===2&&i<2?"两":DG[d]);if(un[i])o.push(un[i])}
+  st=true}
+ return o}
+function zhNum(n){
+ if(n===0)return["零"];
+ const parts=[Math.floor(n/1e8),Math.floor(n/1e4)%1e4,n%1e4],suf=["亿","万",""],o=[];let st=false,pend=false;
+ for(let i=0;i<3;i++){const v=parts[i];
+  if(v===0){if(st)pend=true;continue}
+  if(st&&(pend||v<1000))o.push("零");
+  pend=false;
+  if(v===2&&suf[i])o.push("两");else o.push(...grp(v,!st));
+  if(suf[i])o.push(suf[i]);
+  st=true}
+ return o}
+function readNum(n){
+ const c=zhNum(n),pyA=c.map((ch,i)=>ch==="一"&&YI_BEFORE[c[i+1]]?YI_BEFORE[c[i+1]]:CH[ch][0]);
+ return{c,zh:c.join(""),pyA,py:pyA.join(" "),er:c.map(ch=>CH[ch][1]).join(" "),ur:c.map(ch=>CH[ch][2]).join(" ")}}
+const EN_N=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
+const UR_N=["صفر","ایک","دو","تین","چار","پانچ","چھ","سات","آٹھ","نو","دس","گیارہ","بارہ","تیرہ","چودہ","پندرہ","سولہ","سترہ","اٹھارہ","انیس","بیس"];
+const TENS={30:["thirty","تیس"],40:["forty","چالیس"],50:["fifty","پچاس"],60:["sixty","ساٹھ"],70:["seventy","ستر"],80:["eighty","اسی"],90:["ninety","نوے"],100:["one hundred","سو"]};
+const nameOf=n=>n<=20?[EN_N[n],UR_N[n]]:TENS[n];
+const item=(n,en,un)=>Object.assign({n,en,un},readNum(n));
+const itemN=n=>{const m=nameOf(n);return item(n,m[0],m[1])};
+const UDIG="۰۱۲۳۴۵۶۷۸۹",udig=n=>String(n).replace(/\d/g,d=>UDIG[d]),fmt=n=>n.toLocaleString("en-US");
+const range=(a,b,s=1)=>{const o=[];for(let i=a;i<=b;i+=s)o.push(i);return o};
+const tip=h=>$("div","tip",h);
+
+async function countRun(items,tiles){
+ stopAll();const my=tok;
+ for(let i=0;i<items.length;i++){
+  if(my!==tok)return;
+  const t=tiles[i];t.classList.add("playing");t.scrollIntoView({block:"nearest"});
+  await say(items[i].zh,1,null);
+  if(trOn&&my===tok){await sleep(150);await sayEn(items[i].en,null)}
+  if(urOn&&my===tok){await sleep(150);await sayUr(items[i].un,null)}
+  t.classList.remove("playing");await sleep(250)}}
+function tile(it){
+ const b=$("button","ntile",`<span class="dg">${it.n}</span><span class="ud" aria-hidden="true">${udig(it.n)}</span><span class="h">${it.zh}</span><span class="p">${it.py}</span><span class="pr">${it.er}</span><span class="ur prx" lang="ur" dir="rtl">${it.ur}</span><span class="w">${it.en} · <span lang="ur">${it.un}</span></span>`);
+ b.setAttribute("aria-label",it.n+", "+it.en+", "+it.zh);
+ b.onclick=()=>{stopAll();say(it.zh,1,b)};return b}
+function tileSet(el,items,label){
+ const bar=$("div","bar"),btn=$("button","btn",PLAY+label),grid=$("div","ngrid");
+ const ts=items.map(it=>{const t=tile(it);grid.append(t);return t});
+ btn.onclick=()=>countRun(items,ts);bar.append(btn);el.append(bar,grid)}
+function bigRow(it){
+ const r=$("div","line solo"),t=$("div","txt",`<div class="py">${it.py}</div><div class="zh">${it.zh}</div><div class="sound"><div class="pr">${it.er}</div><div class="ur prx" lang="ur" dir="rtl">${it.ur}</div></div><div class="en"><span class="big">${fmt(it.n)}</span> ${it.en}</div><div class="ur ut" lang="ur" dir="rtl">${it.un}<button class="pill urb" data-u="${esc(it.un)}" aria-label="Play Urdu audio">${ICON}<span lang="ur">اردو</span></button></div>`);
+ t.querySelector(".en").append(tb(it.en));r.append(t,sb(b=>say(it.zh,1,b)));return r}
+
+function builder(el){
+ const card=$("div","card"),bar=$("div","bar"),inp=$("input","nin"),rnd=$("button","btn alt","Random number");
+ inp.type="text";inp.inputMode="numeric";inp.maxLength=9;inp.value="35";inp.setAttribute("aria-label","Type a number from 0 to 999,999,999");
+ const big=$("div","nbig"),row=$("div","nrow"),toks=$("div","toks"),snd=$("div","sound nsound");let cur=null;
+ const play=sb(b=>{if(cur)say(cur.zh,1,b)});
+ row.append(toks,play);bar.append(inp,rnd);card.append(bar,big,row,snd);el.append(card);
+ function draw(){
+  const raw=inp.value.replace(/\D/g,"").slice(0,9);if(inp.value!==raw)inp.value=raw;
+  if(raw===""){cur=null;big.textContent="Type a number to see how it is said in Chinese.";toks.innerHTML="";snd.classList.add("hide");return}
+  const n=parseInt(raw,10);cur=readNum(n);snd.classList.remove("hide");
+  big.innerHTML=`<b>${fmt(n)}</b><span lang="ur">${udig(n)}</span>`;
+  toks.innerHTML=cur.c.map((ch,i)=>`<span class="tok"><b>${ch}</b><i>${cur.pyA[i]}</i></span>`).join("");
+  snd.innerHTML=`<div class="py">${cur.py}</div><div class="pr">${cur.er}</div><div class="ur prx" lang="ur" dir="rtl">${cur.ur}</div>`}
+ inp.oninput=draw;
+ rnd.onclick=()=>{const n=Math.floor(Math.random()*Math.pow(10,1+Math.floor(Math.random()*5)));inp.value=n;draw();stopAll();say(cur.zh,1,play)};
+ draw()}
+
+function quiz(el){
+ const R={"1–10":[1,10],"1–20":[1,20],"1–100":[1,100],"1–1,000":[1,1000]};
+ const card=$("div","card"),bar=$("div","bar"),sel=$("select"),top=$("div","qtop"),opts=$("div","qopts"),fb=$("div","qfb"),next=$("button","btn alt","Next number"),score=$("span","score","Score 0 / 0");
+ sel.setAttribute("aria-label","Number range");Object.keys(R).forEach(k=>sel.innerHTML+=`<option>${k}</option>`);
+ let ans=0,right=0,total=0,locked=false;
+ const play=sb(b=>say(zhNum(ans).join(""),1,b));
+ bar.append(sel);top.append(play,$("p",0,"Listen, then tap the number you heard."),score);
+ fb.setAttribute("role","status");card.append(bar,top,opts,fb,next);el.append(card);
+ function choices(lo,hi){
+  const s=new Set([ans]);
+  [1,-1,2,-2,3,-3,10,-10,100,-100].sort(()=>Math.random()-.5).forEach(d=>{const v=ans+d;if(s.size<4&&v>=lo&&v<=hi)s.add(v)});
+  while(s.size<4)s.add(lo+Math.floor(Math.random()*(hi-lo+1)));
+  return[...s].sort(()=>Math.random()-.5)}
+ function ask(listen){
+  const[lo,hi]=R[sel.value];ans=lo+Math.floor(Math.random()*(hi-lo+1));locked=false;fb.textContent="";opts.innerHTML="";
+  choices(lo,hi).forEach(n=>{const b=$("button","qopt",fmt(n));b.onclick=()=>pick(n,b);b.dataset.n=n;opts.append(b)});
+  if(listen){stopAll();say(zhNum(ans).join(""),1,play)}}
+ function pick(n,b){
+  if(locked)return;locked=true;total++;
+  const r=readNum(ans);
+  if(n===ans){right++;b.classList.add("ok");fb.innerHTML=`Correct. <span class="zh">${r.zh}</span> · ${r.py}`}
+  else{b.classList.add("bad");opts.querySelector(`[data-n="${ans}"]`).classList.add("ok");fb.innerHTML=`Not quite. It was <b>${fmt(ans)}</b>: <span class="zh">${r.zh}</span> · ${r.py}`}
+  score.textContent=`Score ${right} / ${total}`}
+ sel.onchange=()=>{right=0;total=0;score.textContent="Score 0 / 0";ask(true)};
+ next.onclick=()=>ask(true);ask(false)}
+
+function showCounting(scrollTop){
+ stopAll();
+ document.querySelectorAll(".chip").forEach(c=>{const on=c===cntBtn;c.classList.toggle("on",on);if(on)c.setAttribute("aria-current","true");else c.removeAttribute("aria-current")});
+ const el=lessonEl;el.innerHTML="";
+ el.append($("h2","lt",`<span class="no">Learn to count</span>数数<span class="en">Counting in Chinese, from 0 to 100 million</span>`));
+ el.append(tip("Tap any number to hear it. <b>Count along</b> plays a whole row, one number after another. Turn on <b>English</b> or <b>Urdu</b> at the top to hear the meaning after each number."));
+
+ el.append($("h2","sec","0–10 · 基本数字 Basic numbers"));
+ let c=$("div","card");tileSet(c,range(0,10).map(itemN),"Count along 0–10");el.append(c);
+
+ el.append($("h2","sec","11–20 · 十几 Teens"));
+ c=$("div","card");tileSet(c,range(11,20).map(itemN),"Count along 11–20");
+ c.append(tip(`Say <span class="zh">十</span> (ten), then the digit: <span class="zh">十</span> + <span class="zh">五</span> = <span class="zh">十五</span>, which is 15. Twenty is <span class="zh">二十</span>, meaning “two tens”.`));el.append(c);
+
+ el.append($("h2","sec","10–100 · 整十 Tens"));
+ c=$("div","card");tileSet(c,range(10,100,10).map(itemN),"Count along by tens");
+ c.append(tip(`Digit + <span class="zh">十</span>: <span class="zh">三</span> + <span class="zh">十</span> = <span class="zh">三十</span> (30). Add one more digit for numbers in between: <span class="zh">三十五</span> is 35 and <span class="zh">九十九</span> is 99.`));el.append(c);
+
+ el.append($("h2","sec","百 · 千 · 万 · 亿 Hundreds and beyond"));
+ c=$("div","card");
+ c.append(tip(`<b>零 líng</b> fills a gap: <span class="zh">一百零一</span> is 101. <b>两 liǎng</b> replaces 二 before 百, 千 and 万: <span class="zh">两百</span> is 200. In Urdu terms, <span class="zh">十万</span> is one <b>lakh</b> and <span class="zh">一千万</span> is one <b>crore</b>.`));
+ [[100,"one hundred","سو"],[101,"one hundred and one","ایک سو ایک"],[110,"one hundred and ten","ایک سو دس"],[200,"two hundred","دو سو"],[1000,"one thousand","ایک ہزار"],[2000,"two thousand","دو ہزار"],[10000,"ten thousand","دس ہزار"],[100000,"one hundred thousand (one lakh)","ایک لاکھ"],[1000000,"one million (ten lakh)","دس لاکھ"],[10000000,"ten million (one crore)","ایک کروڑ"],[100000000,"one hundred million (ten crore)","دس کروڑ"]]
+  .forEach(a=>c.append(bigRow(item(a[0],a[1],a[2]))));
+ el.append(c);
+
+ el.append($("h2","sec","数字生成器 Number builder"));
+ el.append(tip("Type any number up to 999,999,999. Each piece is shown with its pinyin, so you can see how the number is built."));
+ builder(el);
+
+ el.append($("h2","sec","听力练习 Listening quiz"));
+ quiz(el);
+ if(scrollTop)window.scrollTo(0,0)}
+
+/* ---------- wiring ---------- */
+T.forEach((z,i)=>{const b=$("button","chip",i+1);b.dataset.n=i+1;b.title=z;b.setAttribute("aria-label","Lesson "+(i+1)+": "+z);b.disabled=!L.some(x=>x.n===i+1);b.onclick=()=>show(i+1,true);menuEl.append(b)});
+const cntBtn=$("button","chip cnt",'<b aria-hidden="true">数</b><span>Counting</span>');cntBtn.title="Counting 数数";cntBtn.setAttribute("aria-label","Counting lessons");cntBtn.onclick=()=>showCounting(true);menuEl.prepend(cntBtn);
+function flip(btn,on,label){btn.classList.toggle("is-on",on);btn.setAttribute("aria-pressed",on);btn.querySelector(".st").textContent=label}
+trBtn.onclick=()=>{trOn=!trOn;flip(trBtn,trOn,trOn?"On":"Off")};
+urBtn.onclick=()=>{urOn=!urOn;flip(urBtn,urOn,urOn?"On":"Off")};
+stopBtn.onclick=stopAll; /* the old code used the id "stop", which collided with window.stop, so this button never worked */
+spdBtn.onclick=()=>{rate=rate===.85?.6:rate===.6?1:.85;spdBtn.textContent="Speed: "+(rate===.6?"Slow":rate===1?"Fast":"Normal")};
+show(1);
+</script></body></html>
