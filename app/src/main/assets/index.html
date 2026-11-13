@@ -177,11 +177,10 @@ td:last-child{width:54px;text-align:right}
   <button class="btn ghost" id="spd">Speed: Slow</button>
   <button class="btn ghost" id="stopBtn"><svg viewBox="0 0 12 12" aria-hidden="true"><rect x="1" y="1" width="10" height="10" rx="2" fill="currentColor"/></svg>Stop</button>
   <button class="tog en is-on" id="trb" aria-pressed="true"><i></i>English after each line<span class="st">On</span></button>
-  <button class="tog ur is-on" id="urt" aria-pressed="true"><i></i>Urdu after each line<span class="st">On</span></button>
  </section>
  <div id="lesson"></div>
  <p class="note" id="note"></p>
- <p class="note">Respellings are approximate and do not show tones. Follow the pinyin tone marks and listen to the red speaker button. Urdu translations are simple wording and worth checking with an Urdu speaker. Urdu audio uses an Urdu voice installed on your device, or plays online audio when you are connected.</p>
+ <p class="note">Respellings are approximate and do not show tones. Follow the pinyin tone marks and listen to the red speaker button. Urdu translations are displayed as text only; audio is available for Chinese and English.</p>
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -329,7 +328,7 @@ const PR={
 const UR={"妈种麻，我放马。马吃麻，妈骂马。": "ماں سن بوتی ہے، میں گھوڑا چراتا ہوں۔ گھوڑا سن کھاتا ہے، ماں گھوڑے کو ڈانٹتی ہے۔", "AI小语，你好！": "اے آئی شیاؤیو، ہیلو!", "王老师，你好！": "محترمہ وانگ، ہیلو!", "你好": "ہیلو", "王老师": "محترمہ وانگ (استاد)", "大家好！": "سب کو ہیلو!", "老师，您好！": "استاد صاحب، آپ کو سلام!", "你们好！": "آپ سب کو ہیلو!", "你好，小语！": "ہیلو، شیاؤیو!", "大家": "سب لوگ", "好": "اچھا", "学生": "طالب علم", "们": "جمع بنانے کا لاحقہ", "老师": "استاد", "您": "آپ (عزت کے ساتھ)", "你们": "آپ سب (جمع)", "谢谢！": "شکریہ!", "不客气！": "کوئی بات نہیں!", "同学们，再见！": "ہم جماعتو، خدا حافظ!", "老师，再见！": "استاد صاحب، خدا حافظ!", "谢谢": "شکریہ", "不客气": "کوئی بات نہیں", "同学": "ہم جماعت", "再见": "خدا حافظ", "请问，你叫什么名字？": "معاف کیجیے، آپ کا نام کیا ہے؟", "我叫陈天中。": "میرا نام چن تیانژونگ ہے۔", "请问": "معاف کیجیے", "你": "آپ (واحد)", "叫": "نام ہونا", "什么": "کیا", "名字": "نام", "我": "میں", "你好，安妮！": "ہیلو، اینی!", "你好，陈天中！我不是安妮，我是白家月。": "ہیلو چن تیانژونگ! میں اینی نہیں ہوں، میں بائی جیایوئے ہوں۔", "对不起！": "معذرت!", "没关系！": "کوئی بات نہیں!", "不": "نہیں", "是": "ہونا (ہے)", "对不起": "معذرت", "没关系": "کوئی بات نہیں", "没事": "کوئی مسئلہ نہیں", "我是中国人。": "میں چینی ہوں۔", "我是法国人。我的中文老师也是中国人。": "میں فرانسیسی ہوں۔ میرے چینی زبان کے استاد بھی چینی ہیں۔", "人": "انسان؛ شخص", "的": "کا، کی، کے (تعلق کا لاحقہ)", "中国": "چین", "法国": "فرانس", "中文": "چینی زبان", "这是谁？": "یہ کون ہے؟", "这是我女朋友。": "یہ میری گرل فرینڈ ہے۔", "你女朋友是哪国人？": "آپ کی گرل فرینڈ کس ملک کی ہے؟", "她也是泰国人。": "وہ بھی تھائی لینڈ کی ہے۔", "这": "یہ", "谁": "کون", "女朋友": "گرل فرینڈ", "哪": "کون سا", "国": "ملک", "她": "وہ (عورت)", "泰国": "تھائی لینڈ", "喂，一飞！": "ہیلو، ای فے!", "姐姐！": "باجی!", "你工作还忙吗？": "کیا آپ کا کام ابھی بھی مصروف ہے؟", "对，还很忙。你也很忙吗？": "ہاں، ابھی بھی بہت مصروف ہوں۔ کیا آپ بھی بہت مصروف ہیں؟", "我不太忙。我们很想你。": "میں زیادہ مصروف نہیں ہوں۔ ہمیں آپ کی بہت یاد آتی ہے۔", "我也想你们。": "مجھے بھی آپ سب کی یاد آتی ہے۔", "喂": "ہیلو", "姐姐": "بڑی بہن", "工作": "کام؛ نوکری", "还": "ابھی بھی", "忙": "مصروف", "吗": "کیا (سوالیہ لفظ)", "对": "درست؛ ٹھیک", "太": "بہت زیادہ", "我们": "ہم", "想": "یاد کرنا", "一飞忙吗？": "کیا ای فے مصروف ہے؟", "她很忙。": "وہ بہت مصروف ہے۔", "她有多少个学生？": "اس کے کتنے طالب علم ہیں؟", "她有二十个学生。": "اس کے بیس طالب علم ہیں۔", "有": "رکھنا؛ ہونا", "多少": "کتنے", "个": "گنتی کا عمومی لفظ", "我有两个哥哥，你呢？": "میرے دو بڑے بھائی ہیں، اور آپ کے؟", "我没有哥哥。": "میرا کوئی بڑا بھائی نہیں ہے۔", "你家有几口人？": "آپ کے گھر میں کتنے افراد ہیں؟", "我家有四口人，爸爸、妈妈、妹妹和我。": "میرے گھر میں چار افراد ہیں: ابو، امی، چھوٹی بہن اور میں۔", "哥哥": "بڑا بھائی", "呢": "اور (سوال کا لفظ)", "没有": "نہیں ہے", "家": "گھر؛ خاندان", "几": "کتنے", "口": "افراد گننے کا لفظ", "爸爸": "ابو", "妈妈": "امی", "妹妹": "چھوٹی بہن", "和": "اور", "这是您儿子吗？": "کیا یہ آپ کا بیٹا ہے؟", "是的。我有两个孩子，一个儿子，一个女儿。": "جی ہاں۔ میرے دو بچے ہیں، ایک بیٹا اور ایک بیٹی۔", "您儿子几岁？": "آپ کے بیٹے کی عمر کتنی ہے؟", "他今年五岁。": "وہ پانچ سال کا ہے۔", "您女儿多大？": "آپ کی بیٹی کتنی بڑی ہے؟", "她今年十二。": "وہ بارہ سال کی ہے۔", "儿子": "بیٹا", "孩子": "بچے", "女儿": "بیٹی", "岁": "سال (عمر)", "他": "وہ (مرد)", "今年": "اس سال", "多": "کتنا", "大": "بڑا (عمر میں)", "今天几号？": "آج کیا تاریخ ہے؟", "今天9月8号。": "آج آٹھ ستمبر ہے۔", "星期几？": "آج کون سا دن ہے؟", "星期日。今天我休息。": "اتوار ہے۔ آج میری چھٹی ہے۔", "今天": "آج", "号": "تاریخ", "月": "مہینہ", "日": "دن", "星期": "ہفتہ", "星期日": "اتوار", "星期天": "اتوار", "休息": "آرام کرنا", "你会做饭吗？": "کیا آپ کھانا پکانا جانتے ہیں؟", "我会做。": "جی ہاں، میں پکا سکتا ہوں۔", "你会做什么？": "آپ کیا بنا سکتے ہیں؟", "我会做面条儿、饺子，也会做一些菜。星期天我也做饭。": "میں نوڈلز، ڈمپلنگز اور کچھ سالن بنا سکتا ہوں۔ اتوار کو بھی میں کھانا پکاتا ہوں۔", "会": "سکنا؛ آتا ہونا", "做饭": "کھانا پکانا", "做": "بنانا", "面条儿": "نوڈلز", "饺子": "چینی ڈمپلنگز", "一些": "کچھ", "菜": "سالن؛ ڈش", "同乐，下班吗？": "تونگ لے، کیا چھٹی ہو گئی؟", "下班。": "جی، ہو گئی۔", "这是你的新电脑吗？": "کیا یہ آپ کا نیا کمپیوٹر ہے؟", "是的，是我的新电脑。": "جی ہاں، یہ میرا نیا کمپیوٹر ہے۔", "真好看！": "واقعی بہت خوبصورت ہے!", "我也很喜欢它。": "مجھے بھی یہ بہت پسند ہے۔", "下班": "کام سے چھٹی ہونا", "新": "نیا", "电脑": "کمپیوٹر", "真": "واقعی", "好看": "خوبصورت", "喜欢": "پسند کرنا", "它": "یہ (بے جان چیز)", "家月，你的手机号是多少？": "جیایوئے، آپ کا موبائل نمبر کیا ہے؟", "我的手机号是+33 601493190。": "میرا موبائل نمبر +33 601493190 ہے۔", "我的手机号是+86 13552721160。": "میرا موبائل نمبر +86 13552721160 ہے۔", "好的。": "ٹھیک ہے۔", "手机": "موبائل فون", "电话": "ٹیلی فون؛ فون کال", "家月，明天你去哪儿？": "جیایوئے، کل آپ کہاں جا رہی ہیں؟", "我想去超市买东西。": "میں سپر مارکیٹ جا کر سامان خریدنا چاہتی ہوں۔", "你去超市买什么？": "آپ سپر مارکیٹ سے کیا خریدیں گی؟", "我想买些牛奶。": "میں تھوڑا دودھ خریدنا چاہتی ہوں۔", "明天": "کل (آنے والا)", "去": "جانا", "哪儿": "کہاں", "超市": "سپر مارکیٹ", "买": "خریدنا", "东西": "چیز؛ سامان", "些": "کچھ؛ تھوڑا", "牛奶": "دودھ", "星期天我们去哪儿吃晚饭？": "اتوار کو ہم رات کا کھانا کہاں کھانے جائیں گے؟", "我还想去西安饭店。": "میں پھر سے شیان ریسٹورنٹ جانا چاہتا ہوں۔", "那边的包子非常好吃，我想吃包子。": "وہاں کے باؤزے بہت مزے دار ہوتے ہیں، میں باؤزے کھانا چاہتی ہوں۔", "妈妈，我想吃米饭，不想吃包子。": "امی، میں چاول کھانا چاہتا ہوں، باؤزے نہیں۔", "好的。我们怎么去？": "ٹھیک ہے۔ ہم کیسے جائیں گے؟", "坐出租车去。": "ٹیکسی میں جائیں گے۔", "吃": "کھانا", "晚饭": "رات کا کھانا", "那边": "وہاں", "包子": "باؤزے (بھرے ہوئے بن)", "非常": "بہت زیادہ", "好吃": "مزے دار", "米饭": "چاول", "怎么": "کیسے", "坐": "سوار ہونا", "出租车": "ٹیکسی", "西安饭店": "شیان ریسٹورنٹ", "现在几点？": "اب کیا وقت ہوا ہے؟", "早上八点四十。": "صبح کے آٹھ بج کر چالیس منٹ ہوئے ہیں۔", "我上午十点十分有课。": "میری صبح دس بج کر دس منٹ پر کلاس ہے۔", "好的，我们下午两点见吧。": "ٹھیک ہے، ہم دوپہر کے دو بجے ملتے ہیں۔", "现在": "اب", "点": "بجے", "早上": "صبح سویرے", "上午": "صبح (دوپہر سے پہلے)", "分": "منٹ", "课": "کلاس؛ سبق", "下午": "دوپہر کے بعد", "见": "ملنا", "吧": "تجویز کا لفظ (آئیے)", "下午我想去电影院看电影，你去吗？": "آج دوپہر کے بعد میں سنیما میں فلم دیکھنے جانا چاہتا ہوں، کیا آپ جائیں گی؟", "我不想去，下午还有事。": "میں نہیں جانا چاہتی، دوپہر کے بعد میرا کام ہے۔", "好的。明天呢？": "ٹھیک ہے۔ اور کل؟", "我明天下午两点还上课呢，四点半下课。": "کل دوپہر دو بجے میری کلاس ہے اور ساڑھے چار بجے ختم ہوتی ہے۔", "电影院": "سنیما", "看": "دیکھنا", "电影": "فلم", "事": "کام؛ بات", "上课": "کلاس میں جانا", "半": "آدھا", "下课": "کلاس ختم ہونا", "喂，你在哪儿呢？": "ہیلو، آپ کہاں ہیں؟", "我在家里呢。": "میں گھر پر ہوں۔", "我晚上六点半下班。": "میں شام ساڑھے چھ بجے کام سے فارغ ہوتی ہوں۔", "我八点去医院上班。": "میں آٹھ بجے ہسپتال کام پر جاؤں گا۔", "好的，你去店里买些菜吧。": "ٹھیک ہے، آپ دکان سے کچھ سبزی لے آئیں۔", "好，我十分钟后去。": "ٹھیک ہے، میں دس منٹ بعد جاتا ہوں۔", "在": "میں؛ پر (جگہ کے لیے)", "里": "اندر", "晚上": "شام؛ رات", "医院": "ہسپتال", "上班": "کام پر جانا", "店": "دکان", "分钟": "منٹ", "后": "بعد", "房间外有一只小猫。": "کمرے کے باہر ایک چھوٹی بلی ہے۔", "我没看见，它在哪儿呢？": "مجھے نظر نہیں آئی، وہ کہاں ہے؟", "它在桌子下呢。": "وہ میز کے نیچے ہے۔", "这只小猫真漂亮！": "یہ چھوٹی بلی کتنی خوبصورت ہے!", "房间": "کمرہ", "外": "باہر", "只": "جانوروں کے لیے گنتی کا لفظ", "小": "چھوٹا", "猫": "بلی", "没": "نہیں (ابھی تک نہیں)", "看见": "نظر آنا", "桌子": "میز", "下": "نیچے", "漂亮": "خوبصورت", "我们在哪儿见呢？": "ہم کہاں ملیں گے؟", "在学校书店前见吧。": "آئیں، اسکول کی کتابوں کی دکان کے سامنے ملتے ہیں۔", "好的。下午两点你能到吗？": "ٹھیک ہے۔ کیا آپ دوپہر دو بجے پہنچ سکتے ہیں؟", "我能到。我在学校吃午饭。": "جی ہاں، پہنچ سکتا ہوں۔ میں اسکول میں دوپہر کا کھانا کھاؤں گا۔", "学校": "اسکول", "书店": "کتابوں کی دکان", "前": "سامنے", "能": "سکنا", "到": "پہنچنا", "午饭": "دوپہر کا کھانا", "小胡，还没吃饭呢？": "شیاؤ ہو، کیا آپ نے ابھی کھانا نہیں کھایا؟", "没吃呢。": "نہیں، ابھی نہیں کھایا۔", "大医院病人多，医生非常忙。": "بڑے ہسپتالوں میں مریض بہت ہوتے ہیں اور ڈاکٹر بہت مصروف رہتے ہیں۔", "是的。我爸爸也在医院工作，他也非常忙。": "جی ہاں۔ میرے ابو بھی ہسپتال میں کام کرتے ہیں اور وہ بھی بہت مصروف ہیں۔", "你家有两个医生？": "آپ کے گھر میں دو ڈاکٹر ہیں؟", "对。": "جی ہاں۔", "饭": "کھانا", "病人": "مریض", "医生": "ڈاکٹر", "胡医生": "ڈاکٹر ہو","学校前边有一家电影院。":"اسکول کے سامنے ایک سنیما ہے۔","对。我们晚上去那个电影院看电影吧。":"ہاں۔ آج رات اس سنیما میں فلم دیکھنے چلیں۔","好！我们七点在电影院外边见，好吗？":"ٹھیک! سات بجے سنیما کے باہر ملیں، ٹھیک ہے؟","好的，晚上七点见！":"ٹھیک ہے، رات سات بجے ملتے ہیں!","前边":"سامنے","边":"طرف؛ کنارہ","那个":"وہ","外边":"باہر","椅子上有一本中文书，那是谁的书？":"کرسی پر ایک چینی کتاب ہے، وہ کس کی کتاب ہے؟","是我的书，谢谢。这是我的第二本中文书。":"یہ میری کتاب ہے، شکریہ۔ یہ میری دوسری چینی کتاب ہے۔","不客气。你明天上午在哪儿？":"کوئی بات نہیں۔ تم کل صبح کہاں ہو گے؟","我明天上午在学校学习。":"میں کل صبح اسکول میں پڑھوں گا۔","椅子":"کرسی","上":"اوپر؛ کے اوپر","本":"کتابوں کا پیمانہ لفظ","书":"کتاب","那":"وہ","第":"ترتیبی عدد کا لاحقہ","学习":"پڑھنا؛ سیکھنا","明天星期六，你做什么？":"کل ہفتہ ہے، تم کیا کرو گے؟","我白天在家里读书，晚上和朋友们去外边唱歌。":"میں دن میں گھر پر پڑھتا ہوں، شام کو دوستوں کے ساتھ باہر گانے جاتا ہوں۔","你唱歌很好听。":"تم بہت اچھا گاتے ہو۔","谢谢！您星期六做什么？":"شکریہ! آپ ہفتے کو کیا کریں گی؟","我在家里做饭、看电视，和孩子们、小狗玩。":"میں گھر پر کھانا پکاؤں گی، ٹی وی دیکھوں گی اور بچوں اور کتے کے ساتھ کھیلوں گی۔","我也有一只小狗。":"میرے پاس بھی ایک چھوٹا کتا ہے۔","白天":"دن؛ دن کا وقت","读书":"کتاب پڑھنا","朋友":"دوست","唱":"گانا","歌":"گانا (نغمہ)","好听":"سننے میں اچھا","电视":"ٹیلی ویژن","狗":"کتا","玩":"کھیلنا؛ مزہ کرنا","请问，有杯子吗？":"معاف کیجیے، کیا کپ ہیں؟","有，杯子在这边。":"جی ہاں، کپ اس طرف ہیں۔","多少钱一个？":"ایک کتنے کا ہے؟","这些五块钱一个，那些十块钱一个。":"یہ پانچ یوان کا ایک ہے اور وہ دس یوان کا ایک ہے۔","我买这个吧。":"میں یہ والا لے لیتی ہوں۔","杯子":"کپ؛ گلاس","售货员":"دکان کا ملازم","这边":"اس طرف","钱":"پیسے","这些":"یہ (جمع)","块":"یوان (کاغذی رقم)","那些":"وہ (جمع)","这儿的水果真不少！":"یہاں پھل واقعی بہت ہیں!","您想买什么？":"آپ کیا خریدنا چاہتی ہیں؟","我想买两斤苹果。":"میں دو جن سیب خریدنا چاہتی ہوں۔","苹果三块五一斤。这些七块二，七块钱吧。":"سیب ساڑھے تین یوان کا ایک جن ہے۔ یہ سات یوان بیس فین بنے، سات یوان ہی دے دیں۔","好的，这儿的苹果真便宜！":"ٹھیک ہے، یہاں کے سیب واقعی سستے ہیں!","这儿":"یہاں","水果":"پھل","少":"کم","斤":"جن (آدھا کلو)","苹果":"سیب","便宜":"سستا","这家商店衣服真多！这件一百元，怎么样？":"اس دکان میں کپڑے بہت ہیں! یہ والا سو یوان کا ہے، کیسا ہے؟","好看，也不贵。":"اچھا لگتا ہے اور مہنگا بھی نہیں۔","小雪能穿，买一件吧。":"شیاؤ شوئے پہن سکتی ہے، ایک لے لیتے ہیں۔","好的。小明能穿吗？":"ٹھیک ہے۔ کیا شیاؤ منگ پہن سکتا ہے؟","不能。这些是女孩子穿的衣服，男孩子的衣服在那儿。":"نہیں۔ یہ لڑکیوں کے کپڑے ہیں، لڑکوں کے کپڑے وہاں ہیں۔","商店":"دکان","衣服":"کپڑے","件":"کپڑوں کا پیمانہ لفظ","元":"یوان (چینی کرنسی)","怎么样":"کیسا","贵":"مہنگا","穿":"پہننا","女":"عورت؛ لڑکی","男":"مرد؛ لڑکا","那儿":"وہاں","喂，李文，你什么时候能到饭店？":"ہیلو، لی ون، تم ریستوراں کب پہنچ سکو گے؟","还不知道，正在找呢。它是不是在超市后边？":"ابھی معلوم نہیں، ڈھونڈ رہا ہوں۔ کیا وہ سپر مارکیٹ کے پیچھے ہے؟","是的。你开车没开车？":"ہاں۔ کیا تم گاڑی چلا رہے ہو یا نہیں؟","我没开车，坐车呢。":"میں گاڑی نہیں چلا رہا، سواری میں بیٹھا ہوں۔","时候":"وقت","饭店":"ریستوراں؛ ہوٹل","知道":"جاننا","正在":"(کام) ہو رہا ہے","找":"ڈھونڈنا","开车":"گاڑی چلانا","车":"گاڑی","你还在读大学吗？":"کیا تم ابھی یونیورسٹی میں پڑھ رہے ہو؟","对，我读大学呢，还是大学生。":"ہاں، میں یونیورسٹی میں پڑھ رہا ہوں، ابھی طالب علم ہوں۔","你们学习忙不忙？":"کیا تم لوگ پڑھائی میں مصروف ہو؟","非常忙，我学医，我们的课很多。":"بہت مصروف، میں طب پڑھتا ہوں اور ہمارے بہت سے لیکچر ہیں۔","读":"پڑھنا","大学":"یونیورسٹی","大学生":"یونیورسٹی کا طالب علم","学":"سیکھنا","医":"طب","弟弟起床没起床呢？":"کیا چھوٹا بھائی اٹھ گیا؟","没起床呢，还在睡觉。":"نہیں اٹھا، ابھی سو رہا ہے۔","还睡呢？他今天去不去那里？":"ابھی تک سو رہا ہے؟ کیا وہ آج وہاں جائے گا؟","去哪里？":"کہاں؟","去超市。":"سپر مارکیٹ۔","我昨天问他，他对我说，他不去，他今天要和小朋友玩。":"میں نے کل اس سے پوچھا، اس نے کہا وہ نہیں جائے گا، آج وہ دوستوں کے ساتھ کھیلے گا۔","弟弟":"چھوٹا بھائی","起床":"بستر سے اٹھنا","睡觉":"سونا","睡":"سونا","那里":"وہاں","哪里":"کہاں","昨天":"کل (گزشتہ)","问":"پوچھنا","说":"کہنا","要":"چاہنا؛ ارادہ ہونا","小朋友":"بچہ","今天天气怎么样？":"آج موسم کیسا ہے؟","这里的天不太好，下雨了。":"یہاں کا موسم اچھا نہیں، بارش ہو رہی ہے۔","雨大吗？":"کیا بارش تیز ہے؟","有点儿大，我觉得很冷。":"تھوڑی تیز ہے اور مجھے بہت سردی لگ رہی ہے۔","天气":"موسم","这里":"یہاں","天":"موسم؛ دن","下雨":"بارش ہونا","了":"(تبدیلی ظاہر کرنے والا لفظ)","雨":"بارش","有点儿":"تھوڑا سا","觉得":"محسوس کرنا","冷":"ٹھنڈا؛ سرد","昨天下雪了。":"کل برف باری ہوئی۔","是的，太冷了。":"ہاں، بہت ٹھنڈ تھی۔","你昨天没来公司，生病了？":"تم کل دفتر نہیں آئے، کیا بیمار ہو گئے تھے؟","对，我昨天去医院看病了。":"ہاں، میں کل ہسپتال ڈاکٹر کو دکھانے گیا تھا۔","雪":"برف","来":"آنا","公司":"کمپنی؛ دفتر","生病":"بیمار ہونا","看病":"ڈاکٹر کو دکھانا","医生，我病了。":"ڈاکٹر صاحب، میں بیمار ہو گیا ہوں۔","我看看。你觉得怎么样？":"میں دیکھتا ہوں۔ آپ کیسا محسوس کر رہے ہیں؟","我很冷。":"مجھے بہت سردی لگ رہی ہے۔","好的，吃一点儿药，今天休息半天吧。":"ٹھیک ہے، تھوڑی دوا لیں اور آج آدھا دن آرام کریں۔","回家后再喝些热水。":"گھر جانے کے بعد کچھ گرم پانی پئیں۔","病":"بیمار ہونا","一点儿":"تھوڑا سا","药":"دوا","回":"واپس جانا","再":"پھر؛ اس کے بعد","喝":"پینا","热":"گرم","水":"پانی","王老师，我可以再问您一个问题吗？":"محترمہ وانگ، کیا میں آپ سے ایک اور سوال پوچھ سکتی ہوں؟","可以。你有什么问题？":"جی ہاں۔ آپ کا کیا سوال ہے؟","那个小店卖不卖手机？":"کیا وہ چھوٹی دکان موبائل فون بیچتی ہے؟","我不知道。你可以打电话问一下。":"مجھے معلوم نہیں۔ آپ فون کر کے پوچھ سکتی ہیں۔","可以":"سکنا؛ اجازت ہے","问题":"سوال؛ مسئلہ","卖":"بیچنا","打电话":"فون کرنا","一下":"ذرا (ایک بار)","女士，请坐！您喝什么？":"محترمہ، تشریف رکھیے! آپ کیا پئیں گی؟","我看一下。请给我一杯牛奶。":"میں ذرا دیکھ لوں۔ مجھے ایک گلاس دودھ دیجیے۔","好的。您还要什么？":"ٹھیک ہے۔ آپ کو اور کچھ چاہیے؟","我还没吃早饭，再要这个面包和鸡蛋吧。":"میں نے ابھی ناشتہ نہیں کیا، یہ ڈبل روٹی اور انڈہ بھی دے دیں۔","服务员":"ویٹر؛ ویٹریس","女士":"خاتون؛ محترمہ","请":"براہِ کرم","给":"دینا","杯":"کپ؛ گلاس","早饭":"ناشتہ","这个":"یہ","面包":"ڈبل روٹی","鸡蛋":"انڈہ","先生，请坐！您要什么？":"جناب، تشریف رکھیے! آپ کیا لیں گے؟","我要一斤饺子。":"مجھے ایک جن جیاؤزی (ڈمپلنگ) چاہییں۔","好的。一斤饺子四十个。":"ٹھیک ہے۔ ایک جن میں چالیس جیاؤزی ہوتی ہیں۔","四十个太多了，我要一半吧。":"چالیس بہت زیادہ ہیں، میں آدھے لیتا ہوں۔","半斤二十个。您想喝什么？":"آدھا جن بیس ہوتی ہیں۔ آپ کیا پینا چاہیں گے؟","请给我一杯茶吧。":"مجھے ایک کپ چائے دیجیے۔","先生":"جناب؛ صاحب","一半":"آدھا","茶":"چائے","你们上火车后看见王老师了吗？":"کیا ٹرین میں سوار ہونے کے بعد تم نے محترمہ وانگ کو دیکھا؟","没看见。中午车开后，有些人在看书，有些人睡觉了。":"نہیں دیکھا۔ دوپہر کو ٹرین چلنے کے بعد کچھ لوگ کتاب پڑھ رہے تھے اور کچھ سو گئے۔","你呢？":"اور تم؟","我看了一个电影。":"میں نے ایک فلم دیکھی۔","火车":"ٹرین","中午":"دوپہر","开":"(گاڑی کا) روانہ ہونا","有些":"کچھ (لوگ)","有的":"کچھ","你们会说汉语了，也会写汉字了吗？":"اب تم چینی بول سکتے ہو، کیا چینی حروف لکھ بھی سکتے ہو؟","我们都会写了。":"ہم سب لکھ سکتے ہیں۔","老师，我听不见。":"استاد صاحبہ، مجھے سنائی نہیں دے رہا۔","请大家不要说话！请听老师的问题：你们都会写哪些汉字了？":"سب خاموش ہو جائیں! میرا سوال سنیں: آپ سب کون سے چینی حروف لکھ سکتے ہیں؟","我会写这些字了，您看！":"میں یہ حروف لکھ سکتا ہوں، دیکھیے!","写":"لکھنا","都":"سب؛ دونوں","听见":"سنائی دینا","不要":"نہ کرو","说话":"بات کرنا","听":"سننا","哪些":"کون سے (جمع)","字":"حرف؛ لفظ","汉语":"چینی زبان","汉字":"چینی حرف","明年女儿上中学。":"اگلے سال بیٹی مڈل اسکول جائے گی۔","对。儿子也上小学了。":"ہاں۔ بیٹا بھی پرائمری اسکول جائے گا۔","我们家有了一个中学生。":"ہمارے گھر میں ایک مڈل اسکول کا طالب علم ہو گیا۔","还有了一个小学生。":"اور ایک پرائمری اسکول کا طالب علم بھی۔","上学后，他们都忙了。":"اسکول جانے کے بعد وہ دونوں مصروف ہو جائیں گے۔","是的。太晚了，睡觉吧。":"ہاں۔ بہت دیر ہو گئی، سو جاتے ہیں۔","明年":"اگلا سال","中学":"مڈل/ثانوی اسکول","小学":"پرائمری اسکول","中学生":"مڈل اسکول کا طالب علم","小学生":"پرائمری اسکول کا طالب علم","上学":"اسکول جانا","他们":"وہ سب (مرد/عام)","她们":"وہ سب (خواتین)","它们":"وہ سب (چیزیں)","晚":"دیر؛ دیر سے", "王老师，下个星期六我回法国。": "محترمہ وانگ، آنے والے ہفتہ کے دن میں فرانس واپس جا رہی ہوں۔","你坐飞机回去吗？": "کیا آپ ہوائی جہاز سے واپس جا رہی ہیں؟","对，坐飞机。": "جی ہاں، ہوائی جہاز سے۔","飞机几点走？": "جہاز کتنے بجے روانہ ہوگا؟","下午三点。": "دوپہر کے بعد تین بجے۔","好。你下午一点到机场吧。": "ٹھیک ہے۔ آپ دوپہر کے بعد ایک بجے ہوائی اڈے پہنچ جائیں۔","下个": "اگلا","星期六": "ہفتہ (دن)","回去": "واپس جانا","飞机": "ہوائی جہاز","走": "روانہ ہونا؛ جانا","机场": "ہوائی اڈہ","家月，这是大兴机场。这儿真大！": "جیایوئے، یہ داشنگ ہوائی اڈہ ہے۔ یہ جگہ واقعی بہت بڑی ہے!","是啊。现在几点？": "ہاں، واقعی۔ اب کیا وقت ہوا ہے؟","现在十二点半。还早呢，你不要忙。": "اب ساڑھے بارہ بجے ہیں۔ ابھی کافی وقت ہے، آپ جلدی نہ کریں۔","你的飞机票呢？": "آپ کا ہوائی ٹکٹ کہاں ہے؟","在手机里，你看！": "موبائل میں ہے، دیکھیں!","好。我们去喝杯茶吧。": "ٹھیک ہے۔ چلیں، ایک کپ چائے پیتے ہیں۔","好的。你到法国后，给我打电话。": "ٹھیک ہے۔ فرانس پہنچ کر مجھے فون کرنا۔","好的。我也想你们。": "ٹھیک ہے۔ مجھے بھی آپ سب کی یاد آئے گی۔","大兴机场": "داشنگ ہوائی اڈہ (بیجنگ)","飞机票": "ہوائی ٹکٹ","票": "ٹکٹ","早": "جلدی؛ ابتدائی","啊": "تائید یا حیرت کا لفظ","同学们，你们都到了吗？": "ہم جماعتو، کیا آپ سب پہنچ گئے ہیں؟","到了！": "پہنچ گئے!","这一年，你们学了不少汉语，也会写汉字了。": "اس ایک سال میں آپ نے کافی چینی زبان سیکھ لی ہے اور چینی حروف لکھنا بھی آ گیا ہے۔","谢谢您，王老师！": "آپ کا شکریہ، محترمہ وانگ!","老师，我们很想您！": "استاد صاحبہ، ہمیں آپ کی بہت یاد آئے گی!","我也想你们。明年你们再来中国吧！": "مجھے بھی آپ سب کی یاد آئے گی۔ اگلے سال آپ پھر چین آئیے!","好！大兴机场见！": "ٹھیک ہے! داشنگ ہوائی اڈے پر ملتے ہیں!","年": "سال"};
 /* ---------- helpers ---------- */
 const byId=id=>document.getElementById(id);
-const menuEl=byId("menu"),lessonEl=byId("lesson"),noteEl=byId("note"),spdBtn=byId("spd"),stopBtn=byId("stopBtn"),trBtn=byId("trb"),urBtn=byId("urt"),toastEl=byId("toast");
+const menuEl=byId("menu"),lessonEl=byId("lesson"),noteEl=byId("note"),spdBtn=byId("spd"),stopBtn=byId("stopBtn"),trBtn=byId("trb"),toastEl=byId("toast");
 const $=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
 const sleep=ms=>new Promise(f=>setTimeout(f,ms));
@@ -339,26 +338,37 @@ function toast(m){toastEl.textContent=m;toastEl.classList.add("show");clearTimeo
 
 /* ---------- text blocks ---------- */
 const pr=z=>{const p=PR[z];return p?`<div class="sound"><div class="pr">${p[0]}</div><div class="ur prx" lang="ur" dir="rtl">${p[1]}</div></div>`:""};
-const tru=z=>{const u=UR[z];return u?`<div class="ur ut" lang="ur" dir="rtl">${u}<button class="pill urb" data-z="${esc(z)}" aria-label="Play Urdu audio">${ICON}<span lang="ur">اردو</span></button></div>`:""};
+const tru=z=>{const u=UR[z];return u?`<div class="ur ut" lang="ur" dir="rtl">${u}</div>`:""};
 
 /* ---------- speech ---------- */
 const synth=window.speechSynthesis;
-let rate=.6,tok=0,voice=null,go=null,trOn=true,urOn=true;
+const nativeTTS=!!(window.AndroidTTS && window.AndroidTTS.speak);
+let rate=.6,tok=0,voice=null,go=null,trOn=true;
+let nativeSeq=0;
+const nativePending=new Map();
+window.onNativeTtsDone=(id,ok)=>{const done=nativePending.get(String(id));if(done){nativePending.delete(String(id));done(!!ok)}};
 const keep=new Set(); /* keeps utterances alive so Chrome cannot garbage-collect them mid-speech */
 const voices=()=>synth?synth.getVoices():[];
 const zhVoice=()=>voices().find(x=>/zh[-_]CN/i.test(x.lang))||voices().find(x=>/^zh/i.test(x.lang))||null;
 const enVoice=()=>voices().find(x=>/^en[-_]/i.test(x.lang))||null;
 const urVoice=()=>voices().find(x=>/^ur([-_]|$)/i.test(x.lang))||null;
 function pv(){
+ if(nativeTTS){noteEl.textContent="Chinese and English audio use your phone’s installed text-to-speech voices.";return}
  if(!synth){noteEl.textContent="This browser has no speech support, so Chinese and English audio are unavailable.";return}
- voice=zhVoice();const u=urVoice();
- noteEl.textContent=(voice?"Chinese voice: "+voice.name+" ("+voice.lang+"). ":"No Chinese voice found. Install a Chinese (Mandarin) text-to-speech voice in your phone settings. ")+
-  (u?"Urdu voice: "+u.name+".":"No Urdu voice installed, so Urdu audio plays online and needs internet.")}
+ voice=zhVoice();
+ noteEl.textContent=voice?"Chinese voice: "+voice.name+" ("+voice.lang+").":"No Chinese voice found. Install a Chinese (Mandarin) text-to-speech voice in your phone settings."}
 pv();if(synth)synth.onvoiceschanged=pv;
 
 /* Speak through the device voices. Resolves true when it spoke (or was stopped), false when it failed silently. */
 function utter(text,lang,pick,pitch,btn,watchdog){
  return new Promise(res=>{
+  if(nativeTTS){
+   const my=tok,id=String(++nativeSeq);let settled=false;
+   const finish=ok=>{if(settled)return;settled=true;nativePending.delete(id);btn&&btn.classList.remove("on");res(ok)};
+   nativePending.set(id,finish);btn&&btn.classList.add("on");
+   try{window.AndroidTTS.speak(String(text),lang.startsWith("zh")?"zh":"en",rate,id)}catch(e){finish(false)}
+   return;
+  }
   if(!synth)return res(false);
   const my=tok,u=new SpeechSynthesisUtterance(text);
   u.lang=lang;const v=pick&&pick();if(v){u.voice=v;u.lang=v.lang}
@@ -379,44 +389,11 @@ function utter(text,lang,pick,pitch,btn,watchdog){
 const say=(x,p,b)=>utter(x,"zh-CN",()=>voice,p||1,b);
 const sayEn=(x,b)=>utter(x,"en-US",enVoice,0,b);
 
-/* ---------- Urdu: device voice first, online audio as fallback ---------- */
-const SILENT="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YQAAAAA=";
-const A=new Audio();A.preload="auto";A.referrerPolicy="no-referrer";
-let audStop=null,unlocked=false;
-function stopAudio(){try{A.pause()}catch(e){}if(audStop){const f=audStop;audStop=null;f()}}
-function chunks(t,n=150){const out=[];let cur="";(t.match(/[^۔؟!،,.?;:]+[۔؟!،,.?;:]*/g)||[t]).forEach(p=>{if(cur&&(cur+" "+p).length>n){out.push(cur.trim());cur=p}else cur=(cur+" "+p).trim()});if(cur)out.push(cur);return out}
-function playOnline(text,lang,my){
- return new Promise(res=>{
-  const parts=chunks(text);let i=0,played=false,over=false;
-  const finish=ok=>{if(over)return;over=true;if(audStop===halt)audStop=null;A.onended=A.onerror=null;res(ok)};
-  const halt=()=>finish(played);
-  audStop=halt;
-  const next=()=>{
-   if(my!==tok||i>=parts.length)return finish(true);
-   A.onended=()=>{played=true;next()};
-   A.onerror=()=>finish(played);
-   A.src="https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl="+lang+"&q="+encodeURIComponent(parts[i++]);
-   A.defaultPlaybackRate=A.playbackRate=Math.max(.7,Math.min(1,rate+.05));
-   const p=A.play();if(p&&p.catch)p.catch(()=>finish(played))};
-  next()})}
-async function sayUr(x,b){
- if(!x)return;
- const my=tok;b&&b.classList.add("on");
- let ok=false;const v=urVoice();
- if(v)ok=await utter(x,"ur-PK",()=>v,0,null,3500);
- if(!ok&&my===tok)ok=await playOnline(x,"ur",my);
- b&&b.classList.remove("on");
- if(!ok&&my===tok)toast("Urdu audio needs an Urdu voice on this device or an internet connection.")}
-
-document.addEventListener("click",e=>{
- const b=e.target.closest(".urb");
- if(b){stopAll();sayUr(b.dataset.u||UR[b.dataset.z],b);return}
- if(!unlocked){unlocked=true;A.src=SILENT;const p=A.play();if(p&&p.then)p.then(()=>{if(A.src.indexOf("data:")===0)A.pause()}).catch(()=>{})} /* lets later auto-played Urdu work on iPhone */
-});
 
 function stopAll(){
  tok++;if(go){go();go=null}
- stopAudio();if(synth)synth.cancel();
+ if(synth)synth.cancel();
+ if(nativeTTS){try{window.AndroidTTS.stop()}catch(e){};for(const [id,finish] of nativePending)finish(true)}
  document.querySelectorAll(".spk.on,.pill.on,.ntile.on,.ntile.playing").forEach(b=>b.classList.remove("on"));
  document.querySelectorAll(".line.playing,.ntile.playing").forEach(r=>r.classList.remove("playing"))}
 
@@ -442,7 +419,7 @@ function dlg(el,d){
    else{
     await say(d[i][1],SP[d[i][0]][2],r.querySelector(".spk.play"));
     if(trOn&&my===tok){await sleep(200);await sayEn(d[i][3],null)}
-    if(urOn&&my===tok&&UR[d[i][1]]){await sleep(200);await sayUr(UR[d[i][1]],null)}}
+}
    r.classList.remove("playing");await sleep(300)}}
  all.onclick=()=>run(null);
  nx.onclick=()=>{if(go){const f=go;go=null;f()}};
@@ -513,7 +490,7 @@ async function countRun(items,tiles){
   const t=tiles[i];t.classList.add("playing");t.scrollIntoView({block:"nearest"});
   await say(items[i].zh,1,null);
   if(trOn&&my===tok){await sleep(150);await sayEn(items[i].en,null)}
-  if(urOn&&my===tok){await sleep(150);await sayUr(items[i].un,null)}
+
   t.classList.remove("playing");await sleep(250)}}
 function tile(it){
  const b=$("button","ntile",`<span class="dg">${it.n}</span><span class="ud" aria-hidden="true">${udig(it.n)}</span><span class="h">${it.zh}</span><span class="p">${it.py}</span><span class="pr">${it.er}</span><span class="ur prx" lang="ur" dir="rtl">${it.ur}</span><span class="w">${it.en} · <span lang="ur">${it.un}</span></span>`);
@@ -524,7 +501,7 @@ function tileSet(el,items,label){
  const ts=items.map(it=>{const t=tile(it);grid.append(t);return t});
  btn.onclick=()=>countRun(items,ts);bar.append(btn);el.append(bar,grid)}
 function bigRow(it){
- const r=$("div","line solo"),t=$("div","txt",`<div class="py">${it.py}</div><div class="zh">${it.zh}</div><div class="sound"><div class="pr">${it.er}</div><div class="ur prx" lang="ur" dir="rtl">${it.ur}</div></div><div class="en"><span class="big">${fmt(it.n)}</span> ${it.en}</div><div class="ur ut" lang="ur" dir="rtl">${it.un}<button class="pill urb" data-u="${esc(it.un)}" aria-label="Play Urdu audio">${ICON}<span lang="ur">اردو</span></button></div>`);
+ const r=$("div","line solo"),t=$("div","txt",`<div class="py">${it.py}</div><div class="zh">${it.zh}</div><div class="sound"><div class="pr">${it.er}</div><div class="ur prx" lang="ur" dir="rtl">${it.ur}</div></div><div class="en"><span class="big">${fmt(it.n)}</span> ${it.en}</div><div class="ur ut" lang="ur" dir="rtl">${it.un}</div>`);
  t.querySelector(".en").append(tb(it.en));r.append(t,sb(b=>say(it.zh,1,b)));return r}
 
 function builder(el){
@@ -575,7 +552,7 @@ function showCounting(scrollTop){
  document.querySelectorAll(".chip").forEach(c=>{const on=c===cntBtn;c.classList.toggle("on",on);if(on)c.setAttribute("aria-current","true");else c.removeAttribute("aria-current")});
  const el=lessonEl;el.innerHTML="";
  el.append($("h2","lt",`<span class="no">Learn to count</span>数数<span class="en">Counting in Chinese, from 0 to 100 million</span>`));
- el.append(tip("Tap any number to hear it. <b>Count along</b> plays a whole row, one number after another. Turn on <b>English</b> or <b>Urdu</b> at the top to hear the meaning after each number."));
+ el.append(tip("Tap any number to hear it. <b>Count along</b> plays a whole row, one number after another. Turn on <b>English</b> at the top to hear the meaning after each number. Urdu meanings remain available as text."));
 
  el.append($("h2","sec","0–10 · 基本数字 Basic numbers"));
  let c=$("div","card");tileSet(c,range(0,10).map(itemN),"Count along 0–10");el.append(c);
@@ -608,7 +585,6 @@ T.forEach((z,i)=>{const b=$("button","chip",i+1);b.dataset.n=i+1;b.title=z;b.set
 const cntBtn=$("button","chip cnt",'<b aria-hidden="true">数</b><span>Counting</span>');cntBtn.title="Counting 数数";cntBtn.setAttribute("aria-label","Counting lessons");cntBtn.onclick=()=>showCounting(true);menuEl.prepend(cntBtn);
 function flip(btn,on,label){btn.classList.toggle("is-on",on);btn.setAttribute("aria-pressed",on);btn.querySelector(".st").textContent=label}
 trBtn.onclick=()=>{trOn=!trOn;flip(trBtn,trOn,trOn?"On":"Off")};
-urBtn.onclick=()=>{urOn=!urOn;flip(urBtn,urOn,urOn?"On":"Off")};
 stopBtn.onclick=stopAll; /* the old code used the id "stop", which collided with window.stop, so this button never worked */
 spdBtn.onclick=()=>{rate=rate===.85?.6:rate===.6?1:.85;spdBtn.textContent="Speed: "+(rate===.6?"Slow":rate===1?"Fast":"Normal")};
 show(1);
